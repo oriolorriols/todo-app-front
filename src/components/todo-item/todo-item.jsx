@@ -1,25 +1,25 @@
 import "./todo-item.scss";
 
-function ToDoItem({ id, title, description, isDone, letsCheck, canEdit, toEdit }) {
+function ToDoItem({ item, isDone, letsCheck, canEdit, handleEditClick, handleEditInputChange }) {
   return (
-    <div id={id} className="toDoItem p-5">
+    <div id={item.id} className="toDoItem p-5">
       <div>
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <h2>{item.title}</h2>
+        <p>{item.description}</p>
       </div>
 
-      <button onClick={() => toEdit(id, 'true')}>Edit</button>
-      <input type="radio" onChange={() => isDone(id)} checked={letsCheck} />
-      <button onClick={() => toEdit(id, 'false')}>No Edit</button>
+      <button onClick={() => handleEditClick(item)}>Edit</button>
+      <input type="radio" onChange={() => isDone(item.id)} checked={letsCheck} />
+      <button onClick={() => handleEditClick(item)}>No Edit</button>
       <div>
         {canEdit === 'true' ? (
           <input
             type="text"
-            value={title}
-           readOnly
+            value={item.title}
+            onChange={ (e) => handleEditInputChange(e, item)}
           />
         ) : (
-          <span>{title}</span>
+          <span>{item.title}</span>
         )}
       </div>
     </div>

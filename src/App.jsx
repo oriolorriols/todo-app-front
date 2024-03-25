@@ -12,40 +12,33 @@ function App() {
       title: "This is your First ToDo Item",
       description: "This is a fucking description with some phrases",
       completed: '',
-      edit: 'false'
     },
     {
       id: 1,
       title: "This is your Second ToDo Item",
       description: "This is a fucking description with some phrases",
       completed: '',
-      edit: 'false'
     },
     {
       id: 2,
       title: "This is your Third ToDo Item",
       description: "This is a fucking description with some phrases",
       completed: '',
-      edit: 'false'
     },
     {
       id: 3,
       title: "This is your Fourth ToDo Item",
       description: "This is a fucking description with some phrases",
       completed: '',
-      edit: 'false'
     }
   ]
-
 
 
   const [title, setTitle] = useState('')
   const [subtitle, setSubtitle] = useState('')
   const [description, setDescription] = useState('')
-
+  
   const [toDoList, setToDoList] = useState(toDoItemList)
- // const [isEditing, setEditing] = useState(false)
- // const [currentToDoItem, setCurrentToDoItem] = useState()
 
   const addToDoItem = e => {
     e.preventDefault()
@@ -69,14 +62,38 @@ function App() {
   }
 
   function getID(){
-  var largestId = toDoList[0].id
-   for (let i=0; i<toDoList.length; i++){
-    if (toDoList[i].id>largestId) {
-        var largestId=toDoList[i].id;
+    var largestId = toDoList[0].id
+     for (let i=0; i<toDoList.length; i++){
+      if (toDoList[i].id>largestId) {
+          var largestId=toDoList[i].id;
+      }
+    }
+      return largestId + 1
+    }
+
+  function handleEditClick(item) {
+    let id = item.id
+    let newList = [...toDoList]
+    let isForEditing = newList.find(item => item.id === id)
+
+    if(item.edit !== 'true'){
+      isForEditing.edit = 'true'
+      setToDoList(newList);
+    } else {
+      isForEditing.edit = 'false'
+      setToDoList(newList);
     }
   }
-    return largestId + 1
+
+  function handleEditInputChange(e, item) {
+    let id = item.id
+    let newList = [...toDoList]
+    let isForEditing = newList.find(item => item.id === id)
+    isForEditing.title = e.target.value
+    console.log(e)
+    setToDoList(newList);
   }
+
 
   function setToDone(id) {
     const newList = [...toDoList]
@@ -90,14 +107,6 @@ function App() {
     setToDoList(newList)
   }
 
-  function isEdditing(id, value){
-    let newList = [...toDoList]
-    let isForEditing = newList.find(item => item.id === id)
-
-    isForEditing.edit = value
-    setToDoList(newList)
-  }
-  
   return (
     <>
       <div className="container mx-auto">
@@ -112,12 +121,11 @@ function App() {
           {toDoList.map((item) => (
             <ToDoItem 
               key={item.id} 
-              id={item.id} 
-              title={item.title} 
-              description={item.description} 
+              item={item}
               isDone={setToDone} 
               letsCheck={item.completed} 
-              toEdit={isEdditing}
+              handleEditClick={handleEditClick}
+              handleEditInputChange={handleEditInputChange}
               canEdit={item.edit}>
             </ToDoItem>
           ))}
