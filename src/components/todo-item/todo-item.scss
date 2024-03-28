@@ -8,12 +8,26 @@
 .toDoItem h2{ 
     font-size: 20px;
     font-weight: 700;
+    overflow-wrap: break-word;
 }
 
 .toDoItem p{
     font-weight: 300;
+    overflow-wrap: break-word;
 }
 
+.toDoItem input[type="text"], .toDoItem textarea{
+    display: block;
+    width: 100%;
+    color: black !important;
+    margin-bottom: 6px;
+    overflow-wrap: break-word;
 
+}
+
+.toDoItem input:first-child{
+    font-size: 20px;
+    font-weight: 700;
+}
 
 
