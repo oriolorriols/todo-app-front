@@ -1,37 +1,11 @@
 import { useState } from "react";
 import Header from "./components/header/header";
-import ToDoItem from "./components/todo-item/todo-item";
+import ToDoList from "./components/todo-list/todo-list"
+import lists from "./lists/toDoItemLists.json"
+
 import "./App.scss";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
 function App() {
-  const toDoItemList = [
-    {
-      id: 0,
-      title: "This is your First ToDo Item",
-      description: "This is a fucking description with some phrases",
-      completed: "",
-    },
-    {
-      id: 1,
-      title: "This is your Second ToDo Item",
-      description: "This is a fucking description with some phrases",
-      completed: "",
-    },
-    {
-      id: 2,
-      title: "This is your Third ToDo Item",
-      description: "This is a fucking description with some phrases",
-      completed: "",
-    },
-    {
-      id: 3,
-      title: "This is your Fourth ToDo Item",
-      description: "This is a fucking description with some phrases",
-      completed: "",
-    },
-  ];
 
   const listOfLists = [
     {
@@ -48,7 +22,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const [toDoList, setToDoList] = useState(toDoItemList);
+  const [toDoList, setToDoList] = useState(lists.toDoItemList);
   
 
   const addToDoItem = (e) => {
@@ -62,12 +36,14 @@ function App() {
       edit: "false",
     };
 
-    const newListOfItems = toDoList.concat(newItem);
+    if(description==="" || title==="") {} 
+    else {  
+      const newListOfItems = toDoList.concat(newItem);
+      setToDoList(newListOfItems);
 
-    setToDoList(newListOfItems);
-
-    setTitle("");
-    setDescription("");
+      setTitle("");
+      setDescription("");
+    }
   };
 
   function getID() {
@@ -124,7 +100,6 @@ function App() {
     setToDoList(newList);
   }
 
-  // Drag&Drop
   const handleDragDrop = (results) => {
     const {source, destination, type} = results
     if (!destination) return 
@@ -138,6 +113,13 @@ function App() {
 
       return setToDoList (reoderItems)
     }
+  }
+
+  function eraseItem(item) {
+    let id = item.id;
+    let newList = [...toDoList];
+    const erasedItemList = newList.filter(item => item.id !== id)
+    setToDoList(erasedItemList);
   }
 
   return (
@@ -161,67 +143,23 @@ function App() {
           Add
         </button>
 
-        <div className="w-96 bg-stone-500 mt-5">
-          <h1 className="text-black">Shop List</h1>
-        <DragDropContext onDragEnd={handleDragDrop}>
-          <Droppable
-            droppableId="root" type="group">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className="grid my-9">
-                {toDoList.map((item, index) => (
-                  <Draggable draggableId={item.title} key={item.id} index={index}>
-                    {(provided) => { return (
-                      <div {...provided.dragHandleProps} 
-                      {...provided.draggableProps}
-                      ref={provided.innerRef}>                        
-                      <ToDoItem
-                        item={item}
-                        isDone={setToDone}
-                        letsCheck={item.completed}
-                        handleEditClick={handleEditClick}
-                        handleEditInputChange={handleEditInputChange}
-                        canEdit={item.edit}>
-                      </ToDoItem>
-                      </div>
-                    )}}
-                  </Draggable>
-                ))}
-              {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        </div>
-        <DragDropContext onDragEnd={handleDragDrop}>
-          <Droppable
-            droppableId="root" type="group">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className="grid my-9">
-                {toDoList.map((item, index) => (
-                  <Draggable draggableId={item.title} key={item.id} index={index}>
-                    {(provided) => { return (
-                      <div {...provided.dragHandleProps} 
-                      {...provided.draggableProps}
-                      ref={provided.innerRef}>                        
-                      <ToDoItem
-                        item={item}
-                        isDone={setToDone}
-                        letsCheck={item.completed}
-                        handleEditClick={handleEditClick}
-                        handleEditInputChange={handleEditInputChange}
-                        canEdit={item.edit}>
-                      </ToDoItem>
-                      </div>
-                    )}}
-                  </Draggable>
-                ))}
-              {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        
+      <div className="flex">
 
+
+        {listOfLists.map((item) => (
+          <div key={item.id}> 
+            <ToDoList 
+            handleDragDrop={handleDragDrop}
+            handleEditInputChange={handleEditInputChange}
+            handleEditClick={handleEditClick}
+            toDoList={toDoList}
+            setToDone={setToDone}
+            listTitle={item.title}
+            eraseItem={eraseItem}
+            ></ToDoList>
+            </div>
+        ))}
+        </div>     
       </div>
     </>
   );
