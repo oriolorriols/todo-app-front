@@ -1,6 +1,6 @@
 import "./todo-item.scss";
 
-function ToDoItem({ item, isDone, letsCheck, canEdit, handleEditClick, handleEditInputChange, eraseItem }) {
+function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handleEditInputChange, eraseItem }) {
   return (
         <div id={item.id} className="toDoItem p-5 mb-5">
          <div>
@@ -11,7 +11,7 @@ function ToDoItem({ item, isDone, letsCheck, canEdit, handleEditClick, handleEdi
             onChange={ (e) => handleEditInputChange(e, item, 'title')}/>
           <textarea type="text"
             value={item.description}
-            rows={item.description.length / 55}
+            rows={item.description.length / 41}
             onChange={ (e) => handleEditInputChange(e, item, 'description')}/>
           </>
         ) : (
@@ -24,7 +24,7 @@ function ToDoItem({ item, isDone, letsCheck, canEdit, handleEditClick, handleEdi
 
 
       <button onClick={() => handleEditClick(item)}>{canEdit !== 'true' ? 'Edit' : 'Save'}</button>
-      <input type="radio" onChange={() => isDone(item.id)} checked={letsCheck} />
+      <input type="radio" onChange={() => setToDone(item.id)} checked={letsCheck} />
       <button onClick={() => eraseItem(item)}>Erase</button>
 
     </div>

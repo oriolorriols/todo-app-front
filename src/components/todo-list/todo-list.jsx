@@ -18,7 +18,7 @@ function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoL
                       ref={provided.innerRef}>                        
                       <ToDoItem
                         item={item}
-                        isDone={setToDone}
+                        setToDone={setToDone}
                         letsCheck={item.completed}
                         handleEditClick={handleEditClick}
                         handleEditInputChange={handleEditInputChange}

@@ -11,7 +11,6 @@ function App() {
     {
       id: 0,
       title: "Shop List",
-      completed: "",
     },
     {
       id: 1,
