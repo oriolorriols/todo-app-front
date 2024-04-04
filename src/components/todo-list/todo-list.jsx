@@ -11,7 +11,7 @@ function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoL
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef} className="grid my-9">
                 {toDoList.map((item, index) => (
-                  <Draggable draggableId={item.title} key={item.id} index={index}>
+                  <Draggable draggableId={item.id} key={item.id} index={index}>
                     {(provided) => { return (
                       <div {...provided.dragHandleProps} 
                       {...provided.draggableProps}
