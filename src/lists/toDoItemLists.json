@@ -1,55 +1,78 @@
 {
   "toDoItemList": [
     {
-      "id": "task-0",
-      "title": "This is your First ToDo Item",
-      "description": "This is a fucking description with some phrases",
-      "completed": "", 
-      "list": "toDoItemList"
+      "task-0": {
+        "id": "task-0",
+        "title": "This is your First ToDo Item",
+        "description": "This is a fucking description with some phrases",
+        "completed": ""
+      }
     },
     {
-      "id": "task-1",
-      "title": "This is your Second ToDo Item",
-      "description": "This is a fucking description with some phrases",
-      "completed": "",
-      "list": "toDoItemList"
+      "task-1": {
+        "id": "task-1",
+        "title": "This is your Second ToDo Item",
+        "description": "This is a fucking description with some phrases",
+        "completed": ""
+      }
     },
     {
-      "id": "task-2",
-      "title": "This is your Third ToDo Item",
-      "description": "This is a fucking description with some phrases",
-      "completed": "",
-      "list": "toDoItemList"
+      "task-2": {
+        "id": "task-2",
+        "title": "This is your Third ToDo Item",
+        "description": "This is a fucking description with some phrases",
+        "completed": ""
+      }
     },
     {
-      "id": "task-3",
-      "title": "This is your Fourth ToDo Item",
-      "description": "This is a fucking description with some phrases",
-      "completed": "",
-      "list": "toDoItemList"
+      "task-3": {
+        "id": "task-3",
+        "title": "This is your Fourth ToDo Item",
+        "description": "This is a fucking description with some phrases",
+        "completed": ""
+      }
     },
     {
-      "id": "task-4",
-      "title": "This is your Fourth ToDo Item",
-      "description": "This is a fucking description with some phrases",
-      "completed": "",
-      "list": "toDoItemList"
+      "task-4": {
+        "id": "task-4",
+        "title": "This is your Fourth ToDo Item",
+        "description": "This is a fucking description with some phrases",
+        "completed": ""
+      }
     }
   ],
   "columns": [
     {
-      "id": "0",
-      "title": "Column 1",
-      "description": "This is a fucking description with some phrases",
-      "completed": "", 
-      "taskIds": ["task-1", "task-2"]
+      "column-1": {
+        "id": "column-1",
+        "title": "Column 1",
+        "taskIds": [
+          "task-1",
+          "task-2"
+        ]
+      }
     },
     {
-      "id": "0",
-      "title": "Column 2",
-      "description": "This is a fucking description with some phrases",
-      "completed": "", 
-      "taskIds": ["task-3", "task-4"]
+      "column-2": {
+        "id": "column-2",
+        "title": "Column 2",
+        "taskIds": [
+          "task-3",
+          "task-4"
+        ]
+      }
+    },
+    {
+      "column-3": {
+        "id": "column-3",
+        "title": "Column 3",
+        "taskIds": []
+      }
     }
+  ],
+  "columnOrder": [
+    "column-1",
+    "column-2",
+    "column-3"
   ]
 }

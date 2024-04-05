@@ -2,6 +2,7 @@
 
 .toDoItem{
     background-color: $itemColor;
+    color: $secondary-font-color;
     border-radius: 10px;
 }
 
@@ -19,7 +20,6 @@
 .toDoItem input[type="text"], .toDoItem textarea{
     display: block;
     width: 100%;
-    color: black !important;
     margin-bottom: 6px;
     overflow-wrap: break-word;
 

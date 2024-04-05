@@ -1,10 +1,12 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ToDoItem from "../todo-item/todo-item";
+import "./todo-list.scss";
+
 
 function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem }) {
     return (
-<div className="w-96 bg-stone-500 mt-5">
-          <h1 className="text-black">{column.title}</h1>
+      <div className="list w-96 mt-5 mr-4 p-4">
+          <h3 className="text-black">{column.title}</h3>
         
           <Droppable
             droppableId={column.id} type="group">

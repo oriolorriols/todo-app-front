@@ -8,7 +8,7 @@ import "./App.scss";
 
 function App() {
 
-  const lists = {
+  const lists = { 
     toDoItemList: {
       'task-1': { id: 'task-1', title: 'Take out the garbage' },
       'task-2': { id: 'task-2', title: 'Watch my favorite show' },
@@ -36,6 +36,7 @@ function App() {
     // Facilitate reordering of the columns
     columnOrder: ['column-1', 'column-2', 'column-3'],
   };
+
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -177,15 +178,19 @@ function App() {
 
   function eraseItem(item) {
     let id = item.id;
-    let newList = [...toDoList];
-    const erasedItemList = newList.filter(item => item.id !== id)
+    let newList = {...toDoList};
+    const erasedItemList = Object.values(newList).filter(item => item.id !== id)
     setToDoList(erasedItemList);
   }
 
   return (
     <>
-      <div className="container mx-auto">
-        <Header></Header>
+    <div className="all-container">
+
+  
+    <Header></Header>
+      <div className="px-20 pt-10 mx-auto container-lists">
+        
 
         <input
           type="text"
@@ -203,7 +208,7 @@ function App() {
           Add
         </button>
 
-      <div className="flex">
+      <div className=" flex">
 
       <DragDropContext onDragEnd={handleDragDrop}>
         {lists.columnOrder.map((item) => {
@@ -226,7 +231,8 @@ function App() {
       })}
           </DragDropContext>
         </div>     
-      </div>
+      </div>  
+    </div>
     </>
   );
 }

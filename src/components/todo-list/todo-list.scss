@@ -1,0 +1,11 @@
+@import '../../colors.scss';
+
+h3{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.list{
+    background-color: $listColor;
+    border-radius: 10px;
+}

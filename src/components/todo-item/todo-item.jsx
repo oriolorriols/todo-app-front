@@ -4,7 +4,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
   return (
         <div id={item.id} className="toDoItem p-5 mb-5">
          <div>
-      {canEdit === 'true' ? (
+          {canEdit === 'true' ? (
           <>
           <input type="text"
             value={item.title}
@@ -26,6 +26,11 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
       <button onClick={() => handleEditClick(item)}>{canEdit !== 'true' ? 'Edit' : 'Save'}</button>
       <input type="radio" onChange={() => setToDone(item.id)} checked={letsCheck} />
       <button onClick={() => eraseItem(item)}>Erase</button>
+
+          <div className="flex">
+            <img src="/src/assets/watch.svg" width="15px" alt="" />
+            <p className="ml-1">July 15</p>
+          </div>
 
     </div>
   );

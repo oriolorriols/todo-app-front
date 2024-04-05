@@ -1,9 +1,14 @@
+import "./header.scss";
+
 function Header() {
     return(
-        <nav className="">
+        <div className="nav">
+        <nav className="container mx-auto py-10">
+
             <h1>To Do List</h1>
 
         </nav>
+        </div>
     )
 }
 
