@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import Header from "./components/header/header";
 import ToDoList from "./components/todo-list/todo-list"
 import lists from "./lists/toDoItemLists.json"
@@ -21,6 +22,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+
   const [toDoList, setToDoList] = useState(lists.toDoItemList);
   
 
@@ -28,7 +30,7 @@ function App() {
     e.preventDefault();
 
     const newItem = {
-      id: getID(),
+      id: "task-" + getID(),
       title,
       description,
       completed: "",
@@ -46,10 +48,10 @@ function App() {
   };
 
   function getID() {
-    var largestId = toDoList[0].id;
+    let largestId = Number(toDoList[0].id.slice(5));
     for (let i = 0; i < toDoList.length; i++) {
-      if (toDoList[i].id > largestId) {
-        var largestId = toDoList[i].id;
+      if (Number(toDoList[i].id.slice(5)) > largestId) {
+        largestId = Number(toDoList[i].id.slice(5));
       }
     }
     return largestId + 1;
@@ -144,8 +146,8 @@ function App() {
 
       <div className="flex">
 
-
-        {listOfLists.map((item) => (
+      <DragDropContext onDragEnd={handleDragDrop}>
+        {lists.columns.map((item) => (
           <div key={item.id}> 
             <ToDoList 
             handleDragDrop={handleDragDrop}
@@ -158,6 +160,7 @@ function App() {
             ></ToDoList>
             </div>
         ))}
+          </DragDropContext>
         </div>     
       </div>
     </>

@@ -1,11 +1,11 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import ToDoItem from "../todo-item/todo-item";
 
 function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoList, setToDone, listTitle, eraseItem }) {
     return (
 <div className="w-96 bg-stone-500 mt-5">
           <h1 className="text-black">{listTitle}</h1>
-        <DragDropContext onDragEnd={handleDragDrop}>
+        
           <Droppable
             droppableId={listTitle} type="group">
             {(provided) => (
@@ -33,7 +33,7 @@ function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoL
               </div>
             )}
           </Droppable>
-        </DragDropContext>
+      
         </div>
     );
   }
