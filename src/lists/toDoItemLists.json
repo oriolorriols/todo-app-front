@@ -42,14 +42,14 @@
       "title": "Column 1",
       "description": "This is a fucking description with some phrases",
       "completed": "", 
-      "list": "toDoItemList"
+      "taskIds": ["task-1", "task-2"]
     },
     {
       "id": "0",
       "title": "Column 2",
       "description": "This is a fucking description with some phrases",
       "completed": "", 
-      "list": "toDoItemList"
+      "taskIds": ["task-3", "task-4"]
     }
   ]
 }

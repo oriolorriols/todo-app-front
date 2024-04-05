@@ -1,29 +1,47 @@
 import { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Header from "./components/header/header";
-import ToDoList from "./components/todo-list/todo-list"
-import lists from "./lists/toDoItemLists.json"
+import ToDoLists from "./components/todo-list/todo-list"
+// import lists from "./lists/toDoItemLists.json"
 
 import "./App.scss";
 
 function App() {
 
-  const listOfLists = [
-    {
-      id: 0,
-      title: "Shop List",
+  const lists = {
+    toDoItemList: {
+      'task-1': { id: 'task-1', title: 'Take out the garbage' },
+      'task-2': { id: 'task-2', title: 'Watch my favorite show' },
+      'task-3': { id: 'task-3', title: 'Charge my phone' },
+      'task-4': { id: 'task-4', title: 'Cook dinner' },
+      'task-5': { id: 'task-5', title: 'Cook dinner' },
     },
-    {
-      id: 1,
-      title: "Car Adjustments",
+    columns: {
+      'column-1': {
+        id: 'column-1',
+        title: 'To do',
+        taskIds: ['task-1', 'task-2', 'task-3', ],
+      },
+      'column-2': {
+        id: 'column-2',
+        title: 'In progress',
+        taskIds: ['task-4', 'task-5'],
+      },
+      'column-3': {
+        id: 'column-3',
+        title: 'Done',
+        taskIds: [],
+      },
     },
-  ];
+    // Facilitate reordering of the columns
+    columnOrder: ['column-1', 'column-2', 'column-3'],
+  };
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
 
-  const [toDoList, setToDoList] = useState(lists.toDoItemList);
+  const [toDoList, setToDoList] = useState(lists);
   
 
   const addToDoItem = (e) => {
@@ -102,18 +120,59 @@ function App() {
   }
 
   const handleDragDrop = (results) => {
-    const {source, destination, type} = results
+    const {source, destination, draggableId, type} = results
     if (!destination) return 
     if (source.droppableId === destination.droppableId  && source.index === destination.index)  return
-    if (type === 'group'){
-      const reoderItems = [...toDoList]
-      const sourceIndex = source.index
-      const destinationIndex = destination.index
-      const [removedItem] = reoderItems.splice(sourceIndex, 1)
-      reoderItems.splice(destinationIndex, 0, removedItem)
 
-      return setToDoList (reoderItems)
+    const start = toDoList.columns[source.droppableId]
+    const finish = toDoList.columns[destination.droppableId]
+
+    if (start === finish) {
+      const newTaskIds = Array.from(start.taskIds);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      const newColumn = {
+        ...start,
+        taskIds: newTaskIds,
+      };
+
+      const newState = {
+        ...toDoList,
+        columns: {
+          ...toDoList.columns,
+          [newColumn.id]: newColumn,
+        },
+      };
+
+      setToDoList(newState);
+      return;
     }
+
+    // Moving from one list to another
+    const startTaskIds = Array.from(start.taskIds);
+    startTaskIds.splice(source.index, 1);
+    const newStart = {
+      ...start,
+      taskIds: startTaskIds,
+    };
+
+    const finishTaskIds = Array.from(finish.taskIds);
+    finishTaskIds.splice(destination.index, 0, draggableId);
+    const newFinish = {
+      ...finish,
+      taskIds: finishTaskIds,
+    };
+
+    const newState = {
+      ...toDoList,
+      columns: {
+        ...toDoList.columns,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish,
+      },
+    };
+    setToDoList(newState);
   }
 
   function eraseItem(item) {
@@ -147,19 +206,24 @@ function App() {
       <div className="flex">
 
       <DragDropContext onDragEnd={handleDragDrop}>
-        {lists.columns.map((item) => (
-          <div key={item.id}> 
-            <ToDoList 
-            handleDragDrop={handleDragDrop}
+        {lists.columnOrder.map((item) => {
+          const column = toDoList.columns[item]
+          const tasks = toDoList.columns[item].taskIds.map(
+            taskId => toDoList.toDoItemList[taskId]
+          )
+          return (
+          <div key={column.id}> 
+            <ToDoLists 
             handleEditInputChange={handleEditInputChange}
             handleEditClick={handleEditClick}
-            toDoList={toDoList}
+            toDoList={tasks}
             setToDone={setToDone}
-            listTitle={item.title}
+            column={column}
             eraseItem={eraseItem}
-            ></ToDoList>
+            ></ToDoLists>
             </div>
-        ))}
+          )
+      })}
           </DragDropContext>
         </div>     
       </div>

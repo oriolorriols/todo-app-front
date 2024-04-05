@@ -1,13 +1,13 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ToDoItem from "../todo-item/todo-item";
 
-function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoList, setToDone, listTitle, eraseItem }) {
+function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem }) {
     return (
 <div className="w-96 bg-stone-500 mt-5">
-          <h1 className="text-black">{listTitle}</h1>
+          <h1 className="text-black">{column.title}</h1>
         
           <Droppable
-            droppableId={listTitle} type="group">
+            droppableId={column.id} type="group">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef} className="grid my-9">
                 {toDoList.map((item, index) => (
@@ -38,5 +38,5 @@ function ToDoList({handleEditClick, handleEditInputChange, handleDragDrop, toDoL
     );
   }
   
-  export default ToDoList;
+  export default ToDoLists;
   
