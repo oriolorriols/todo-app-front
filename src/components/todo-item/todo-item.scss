@@ -41,3 +41,11 @@
     color: $secondary-font-color;
     border-radius: 10px;
 }
+
+.toDoItem .itemfunctions{
+    opacity: 0;
+}
+
+.toDoItem:hover .itemfunctions{
+    opacity: 1;
+}

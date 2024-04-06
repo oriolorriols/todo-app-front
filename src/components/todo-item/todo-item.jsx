@@ -40,7 +40,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
       
      
       <div className="flex justify-between mt-6">
-        <div>
+        <div className="itemfunctions">
           <button onClick={() => handleEditClick(item)} className={canEdit ? 'save' : 'edit'}>
             <img src="/src/assets/edit.svg" width="18px" alt="" /></button>
 
@@ -50,7 +50,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
         </div>
      
         <div className="flex">
-          <p className="mr-1">{item.deadline}</p>
+          <p className="mr-2">{item.deadline}</p>
           <img src="/src/assets/watch.svg" width="15px" alt="" />
         </div>
     </div>

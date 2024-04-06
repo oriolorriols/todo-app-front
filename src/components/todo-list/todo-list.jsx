@@ -44,9 +44,11 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
 
   return (
       <div className="list w-96 mt-5 mr-4 p-6">
-
-          <h3 onDoubleClick={ (e) => handleEditInputChange(e, column.id, 'column-title')} className="text-black">{column.title}</h3>
-        
+          <div className="flex justify-between">
+            <h3 onDoubleClick={ (e) => handleEditInputChange(e, column.id, 'column-title')} className="text-black">{column.title}</h3>
+            <img src="/src/assets/edit.svg" width="18px" alt="" />
+          </div>
+         
           <Droppable
             droppableId={column.id} type="group">
             {(provided) => (
