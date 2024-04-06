@@ -1,58 +1,46 @@
 {
-  "toDoItemList": [
-    {
+  "toDoItemList":  {
       "task-0": {
         "id": "task-0",
         "title": "This is your First ToDo Item",
         "description": "This is a fucking description with some phrases",
         "completed": ""
-      }
-    },
-    {
+      },
       "task-1": {
         "id": "task-1",
         "title": "This is your Second ToDo Item",
         "description": "This is a fucking description with some phrases",
         "completed": ""
-      }
-    },
-    {
+      },
       "task-2": {
         "id": "task-2",
         "title": "This is your Third ToDo Item",
         "description": "This is a fucking description with some phrases",
         "completed": ""
-      }
-    },
-    {
+      },
       "task-3": {
         "id": "task-3",
         "title": "This is your Fourth ToDo Item",
         "description": "This is a fucking description with some phrases",
         "completed": ""
-      }
-    },
-    {
+      },
       "task-4": {
         "id": "task-4",
-        "title": "This is your Fourth ToDo Item",
+        "title": "This is your Fith ToDo Item",
         "description": "This is a fucking description with some phrases",
         "completed": ""
       }
-    }
-  ],
-  "columns": [
-    {
+    },
+"columns": { 
       "column-1": {
         "id": "column-1",
-        "title": "Column 1",
+        "title": "To Do List",
         "taskIds": [
+          "task-0",
           "task-1",
           "task-2"
         ]
-      }
-    },
-    {
+      },
       "column-2": {
         "id": "column-2",
         "title": "Column 2",
@@ -60,16 +48,14 @@
           "task-3",
           "task-4"
         ]
-      }
-    },
-    {
+      },
       "column-3": {
         "id": "column-3",
         "title": "Column 3",
         "taskIds": []
-      }
     }
-  ],
+  },
+
   "columnOrder": [
     "column-1",
     "column-2",
