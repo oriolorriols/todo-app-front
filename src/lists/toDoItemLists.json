@@ -2,36 +2,36 @@
   "toDoItemList":  {
       "task-0": {
         "id": "task-0",
-        "title": "This is your First ToDo Item",
-        "description": "This is a fucking description with some phrases",
+        "title": "Buy Groceries",
+        "description": "Apples, Oranges...",
         "deadline": "17 July",
         "completed": ""
       },
       "task-1": {
         "id": "task-1",
-        "title": "This is your Second ToDo Item",
-        "description": "This is a fucking description with some phrases",
+        "title": "Walk the Dog",
+        "description": "Park, leash...",
         "deadline": "15 July",
         "completed": ""
       },
       "task-2": {
         "id": "task-2",
-        "title": "This is your Third ToDo Item",
-        "description": "This is a fucking description with some phrases",
+        "title": "Finish Homework",
+        "description": "Math assignment, English essay...",
         "deadline": "20 August",
         "completed": ""
       },
       "task-3": {
         "id": "task-3",
-        "title": "This is your Fourth ToDo Item",
-        "description": "This is a fucking description with some phrases",
+        "title": "Call Mom",
+        "description": "Check in, chat about weekend plans...",
         "deadline": "20 April",
         "completed": ""
       },
       "task-4": {
         "id": "task-4",
-        "title": "This is your Fith ToDo Item",
-        "description": "This is a fucking description with some phrases",
+        "title": "Go for a Run",
+        "description": "5km route, running shoes...",
         "deadline": "16 May",
         "completed": ""
       }
@@ -39,31 +39,37 @@
 "columns": { 
       "column-1": {
         "id": "column-1",
-        "title": "To Do List",
+        "title": "Today",
         "taskIds": [
           "task-0",
-          "task-1",
-          "task-2"
-        ]
+          "task-1"
+          ]
       },
       "column-2": {
         "id": "column-2",
-        "title": "Column 2",
+        "title": "Tomorrow",
         "taskIds": [
-          "task-3",
-          "task-4"
+          "task-2",
+          "task-3"
         ]
       },
       "column-3": {
         "id": "column-3",
-        "title": "Column 3",
+        "title": "This week",
+        "taskIds": ["task-4"]
+      },
+      "column-4": {
+        "id": "column-4",
+        "title": "This month",
         "taskIds": []
-    }
+      }
+    
   },
 
   "columnOrder": [
     "column-1",
     "column-2",
-    "column-3"
+    "column-3", 
+    "column-4"
   ]
 }

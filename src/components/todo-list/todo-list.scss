@@ -1,11 +1,72 @@
 @import '../../colors.scss';
 
-h3{
-    font-size: 20px;
+.list h3{
+    font-size: 25px;
     font-weight: 500;
+    color: $font-color;
 }
 
 .list{
     background-color: $listColor;
     border-radius: 10px;
 }
+
+.addtask input, .addtask textarea{
+    color: $secondary-font-color !important;
+    min-width: 20rem;
+    padding: 5px;
+}
+
+.save{
+    color: $secondary-font-color;
+    font-weight: 600;
+}
+
+.edit{
+    color: #4e4e4e;
+}
+
+.checked{
+    background-color: #e4e4e4;
+    color: #4e4e4e;
+    opacity: 0.6;
+}
+
+
+// radial input 
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--form-background);
+    margin: 0;
+  
+    font: inherit;
+    color: #4e4e4e;
+    width: 18px;
+    height: 18px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+  
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+  
+  input[type="radio"]::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+  }
+  
+  input[type="radio"]:checked::before {
+    transform: scale(0.5);
+    background: url(../../assets/completed.svg);
+    background-repeat: no-repeat;
+    background-position:center center;
+  }
+  

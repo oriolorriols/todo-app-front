@@ -22,7 +22,7 @@
     width: 100%;
     margin-bottom: 6px;
     overflow-wrap: break-word;
-
+    padding: 5px;
 }
 
 .toDoItem input:first-child{
@@ -31,3 +31,13 @@
 }
 
 
+.toDoItem:hover, .toDoItem:active{
+    outline-style: solid;
+    outline-color: $font-color;
+}
+
+.addtaskbutton:hover{
+    background-color: $itemColor;
+    color: $secondary-font-color;
+    border-radius: 10px;
+}

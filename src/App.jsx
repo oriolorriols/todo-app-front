@@ -7,47 +7,62 @@ import lists from "./lists/toDoItemLists.json"
 import "./App.scss";
 
 function App() {
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-
-  
+ 
 
   const [toDoList, setToDoList] = useState(lists);
   
 
-  const addToDoItem = (e) => {
-    e.preventDefault();
+  const addToDoItem = (title, description, column) => {
+    const newDate = new Date();
+    const dayOfMonth = newDate.getDate();
+    const month = newDate.getMonth();
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June", 
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const monthName = monthNames[month];
+    const deadline = `${dayOfMonth + Math.floor(Math.random() * 25) + 1} ${monthName}`;
 
     const newItem = {
       id: "task-" + getID(),
       title,
       description,
-      deadline: new Date().getDay,
+      deadline,
       completed: "",
-      edit: "false",
     };
 
-    if(description==="" || title==="") {} 
+    if(title==="") {} 
     else {  
-      const newListOfItems = toDoList.concat(newItem);
-      setToDoList(newListOfItems);
-
-      setTitle("");
-      setDescription("");
-    }
+      const updatedColumns = { ...toDoList.columns };
+      const newTaskIds = [...updatedColumns[column.id].taskIds, newItem.id];
+      updatedColumns[column.id].taskIds = newTaskIds;
+  
+      // Update the toDoList state with the new item and updated column
+      setToDoList({
+        ...toDoList,
+        toDoItemList: {
+          ...toDoList.toDoItemList,
+          [newItem.id]: newItem,
+        },
+        columns: updatedColumns,
+      });
+  
   };
+}
 
   function getID() {
-    let largestId = Number(toDoList[0].id.slice(5))
-    for (let i = 0; i < toDoList.length; i++) {
-      if (Number(toDoList[i].id.slice(5)) > largestId) {
-        largestId = Number(toDoList[i].id.slice(5))
+    const updatedToDoItemList = Object.values(toDoList.toDoItemList);
+    let largestId = 0;
+  
+    for (let i = 0; i < updatedToDoItemList.length; i++) {
+      const currentId = Number(updatedToDoItemList[i].id.slice(5));
+      if (currentId > largestId) {
+        largestId = currentId;
       }
     }
-    return largestId + 1
-  }
 
+    return largestId + 1;
+  }
   function handleEditClick(item) {
       const updatedToDoItemList = { ...toDoList.toDoItemList }
       const updatedItem = { ...updatedToDoItemList[item.id] }
@@ -203,22 +218,6 @@ function App() {
   
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
-    
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="title"
-        />
-        <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="description"
-        />
-        <button type="submit" onClick={addToDoItem}>
-          Add
-        </button>
 
       <div className=" flex">
 
@@ -237,6 +236,7 @@ function App() {
             setToDone={setToDone}
             column={column}
             eraseItem={eraseItem}
+            addToDoItem={addToDoItem}
             ></ToDoLists>
             </div>
           )
