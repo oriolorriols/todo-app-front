@@ -11,6 +11,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  
 
   const [toDoList, setToDoList] = useState(lists);
   
@@ -22,6 +23,7 @@ function App() {
       id: "task-" + getID(),
       title,
       description,
+      deadline: new Date().getDay,
       completed: "",
       edit: "false",
     };
@@ -37,74 +39,92 @@ function App() {
   };
 
   function getID() {
-    let largestId = Number(toDoList[0].id.slice(5));
+    let largestId = Number(toDoList[0].id.slice(5))
     for (let i = 0; i < toDoList.length; i++) {
       if (Number(toDoList[i].id.slice(5)) > largestId) {
-        largestId = Number(toDoList[i].id.slice(5));
+        largestId = Number(toDoList[i].id.slice(5))
       }
     }
-    return largestId + 1;
+    return largestId + 1
   }
 
   function handleEditClick(item) {
-    let id = item.id;
-    let newList = Object.values(toDoList.toDoItemList);
-    console.log(newList)
-    console.log(item)
-    let isForEditing = newList.find((item) => item.id === id);
-
-    if (item.edit !== "true") {
-      isForEditing.edit = "true";
-    } else {
-      isForEditing.edit = "false";
+      const updatedToDoItemList = { ...toDoList.toDoItemList }
+      const updatedItem = { ...updatedToDoItemList[item.id] }
+  
+      updatedItem.edit = !updatedItem.edit
+  
+      updatedToDoItemList[item.id] = updatedItem
+  
+      setToDoList({
+          ...toDoList,
+          toDoItemList: updatedToDoItemList
+      });
     }
-    
-    // Construir un nuevo objeto que mantenga todas las propiedades de toDoList
-    let updatedToDoList = {
+
+/* exitEditMode()
+  function exitEditMode(){
+    const updatedToDoItemList = { ...toDoList.toDoItemList }
+    for (const itemId in updatedToDoItemList){
+      updatedToDoItemList[itemId].edit = false
+    }
+    setToDoList({
       ...toDoList,
-      toDoItemList: newList.reduce((acc, task) => {
-        acc[task.id] = task;
-        return acc;
-      }, {})
-    };
-
-    // Actualizar el estado con el nuevo objeto
-    setToDoList(updatedToDoList);
-
+      toDoItemList: updatedToDoItemList
+  });
   }
+*/
 
   function handleEditInputChange(e, item, toChange) {
-    let id = item.id;
-    let newList = [...toDoList];
-    let isForEditing = newList.find((item) => item.id === id);
+    const updatedToDoItemList = { ...toDoList.toDoItemList }
+    const updatedItem = { ...updatedToDoItemList[item.id] }
+
+    function changeToDoITemList(){
+      updatedToDoItemList[item.id] = updatedItem
+      setToDoList({
+          ...toDoList,
+          toDoItemList: updatedToDoItemList
+      });
+    }
+
     switch (toChange) {
       case "title":
-        isForEditing.title = e.target.value;
-        console.log(e);
-        break;
+        updatedItem.title = e.target.value
+        changeToDoITemList()
+        break
       case "description":
-        isForEditing.description = e.target.value;
-        console.log(e);
-        break;
+        updatedItem.description = e.target.value
+        changeToDoITemList()
+        break
+      case "column-title":
+        console.log("trying to change title?")
+        break
     }
 
-    setToDoList(newList);
+
   }
 
-  function setToDone(id) {
-    const newList = [...toDoList];
-    const isCompleted = newList.find((item) => item.id === id);
+  function setToDone(item) {
+    const updatedToDoItemList = {...toDoList.toDoItemList }
+    const updatedItem = { ...updatedToDoItemList[item.id] }
 
-    if (isCompleted.completed === "checked") {
-      isCompleted.completed = "";
+    if (updatedItem.completed === "checked") {
+      updatedItem.completed = ""
     } else {
-      isCompleted.completed = "checked";
+      updatedItem.completed = "checked"
     }
-    setToDoList(newList);
+
+    updatedToDoItemList[item.id] = updatedItem
+
+    setToDoList(
+      { ...toDoList,
+        toDoItemList: updatedToDoItemList
+      }
+    )
   }
 
   const handleDragDrop = (results) => {
-    const {source, destination, draggableId, type} = results
+    const {source, destination, draggableId} = results
     if (!destination) return 
     if (source.droppableId === destination.droppableId  && source.index === destination.index)  return
 
@@ -133,7 +153,6 @@ function App() {
       return;
     }
 
-    // Moving from one list to another
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -160,11 +179,22 @@ function App() {
   }
 
   function eraseItem(item) {
-    let id = item.id;
-    let newList = {...toDoList};
-    const erasedItemList = Object.values(newList).filter(item => item.id !== id)
-    setToDoList(erasedItemList);
-  }
+    const updatedToDoItemList = Object.fromEntries(
+        Object.entries(toDoList.toDoItemList)
+            .filter((key) => key !== item.id)
+    );
+
+    const updatedColumns = { ...toDoList.columns };
+    for (const columnId in updatedColumns) {
+        updatedColumns[columnId].taskIds = updatedColumns[columnId].taskIds.filter(taskId => taskId !== item.id);
+    }
+
+    setToDoList({
+        ...toDoList,
+        toDoItemList: updatedToDoItemList,
+        columns: updatedColumns
+    });
+}
 
   return (
     <>
@@ -173,8 +203,7 @@ function App() {
   
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
-        
-
+    
         <input
           type="text"
           value={title}

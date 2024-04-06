@@ -6,7 +6,8 @@ import "./todo-list.scss";
 function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem }) {
     return (
       <div className="list w-96 mt-5 mr-4 p-4">
-          <h3 className="text-black">{column.title}</h3>
+
+          <h3 onDoubleClick={ (e) => handleEditInputChange(e, column.id, 'column-title')} className="text-black">{column.title}</h3>
         
           <Droppable
             droppableId={column.id} type="group">
@@ -25,7 +26,8 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
                         handleEditClick={handleEditClick}
                         handleEditInputChange={handleEditInputChange}
                         canEdit={item.edit}
-                        eraseItem={eraseItem}>
+                        eraseItem={eraseItem}
+                        column={column}>
                       </ToDoItem>
                       </div>
                     )}}
