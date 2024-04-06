@@ -2,11 +2,41 @@ import { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Header from "./components/header/header";
 import ToDoLists from "./components/todo-list/todo-list"
-import lists from "./lists/toDoItemLists.json"
+// import lists from "./lists/toDoItemLists.json"
 
 import "./App.scss";
 
 function App() {
+
+  const lists = { 
+    toDoItemList: {
+      'task-1': { id: 'task-1', title: 'Take out the garbage' },
+      'task-2': { id: 'task-2', title: 'Watch my favorite show' },
+      'task-3': { id: 'task-3', title: 'Charge my phone' },
+      'task-4': { id: 'task-4', title: 'Cook dinner' },
+      'task-5': { id: 'task-5', title: 'Cook dinner' },
+    },
+    columns: {
+      'column-1': {
+        id: 'column-1',
+        title: 'To do',
+        taskIds: ['task-1', 'task-2', 'task-3', ],
+      },
+      'column-2': {
+        id: 'column-2',
+        title: 'In progress',
+        taskIds: ['task-4', 'task-5'],
+      },
+      'column-3': {
+        id: 'column-3',
+        title: 'Done',
+        taskIds: [],
+      },
+    },
+    // Facilitate reordering of the columns
+    columnOrder: ['column-1', 'column-2', 'column-3'],
+  };
+
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,29 +78,16 @@ function App() {
 
   function handleEditClick(item) {
     let id = item.id;
-    let newList = Object.values(toDoList.toDoItemList);
-    console.log(newList)
-    console.log(item)
+    let newList = [...toDoList];
     let isForEditing = newList.find((item) => item.id === id);
 
     if (item.edit !== "true") {
       isForEditing.edit = "true";
+      setToDoList(newList);
     } else {
       isForEditing.edit = "false";
+      setToDoList(newList);
     }
-    
-    // Construir un nuevo objeto que mantenga todas las propiedades de toDoList
-    let updatedToDoList = {
-      ...toDoList,
-      toDoItemList: newList.reduce((acc, task) => {
-        acc[task.id] = task;
-        return acc;
-      }, {})
-    };
-
-    // Actualizar el estado con el nuevo objeto
-    setToDoList(updatedToDoList);
-
   }
 
   function handleEditInputChange(e, item, toChange) {
@@ -194,7 +211,7 @@ function App() {
       <div className=" flex">
 
       <DragDropContext onDragEnd={handleDragDrop}>
-        {toDoList.columnOrder.map((item) => {
+        {lists.columnOrder.map((item) => {
           const column = toDoList.columns[item]
           const tasks = toDoList.columns[item].taskIds.map(
             taskId => toDoList.toDoItemList[taskId]
