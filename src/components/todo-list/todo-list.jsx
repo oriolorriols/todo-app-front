@@ -62,7 +62,7 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
                       <ToDoItem
                         item={item}
                         setToDone={setToDone}
-                        letsCheck={item.completed}
+                        letsCheck={item.status}
                         handleEditClick={handleEditClick}
                         handleEditInputChange={handleEditInputChange}
                         canEdit={item.edit}

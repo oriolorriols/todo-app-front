@@ -21,14 +21,14 @@ function App() {
       "July", "August", "September", "October", "November", "December"
     ];
     const monthName = monthNames[month];
-    const deadline = `${dayOfMonth + Math.floor(Math.random() * 25) + 1} ${monthName}`;
+    const dueDate = `${dayOfMonth + Math.floor(Math.random() * 25) + 1} ${monthName}`;
 
     const newItem = {
       id: "task-" + getID(),
       title,
       description,
-      deadline,
-      completed: "",
+      dueDate,
+      status: "",
     };
 
     if(title==="") {} 
@@ -123,10 +123,10 @@ function App() {
     const updatedToDoItemList = {...toDoList.toDoItemList }
     const updatedItem = { ...updatedToDoItemList[item.id] }
 
-    if (updatedItem.completed === "checked") {
-      updatedItem.completed = ""
+    if (updatedItem.status === "done") {
+      updatedItem.status = ""
     } else {
-      updatedItem.completed = "checked"
+      updatedItem.status = "done"
     }
 
     updatedToDoItemList[item.id] = updatedItem

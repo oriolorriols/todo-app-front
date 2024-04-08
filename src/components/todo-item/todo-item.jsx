@@ -50,7 +50,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
         </div>
      
         <div className="flex">
-          <p className="mr-2">{item.deadline}</p>
+          <p className="mr-2">{item.dueDate}</p>
           <img src="/src/assets/watch.svg" width="15px" alt="" />
         </div>
     </div>

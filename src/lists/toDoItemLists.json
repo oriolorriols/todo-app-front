@@ -4,36 +4,36 @@
         "id": "task-0",
         "title": "Buy Groceries",
         "description": "Apples, Oranges...",
-        "deadline": "17 July",
-        "completed": ""
+        "dueDate": "17 July",
+        "status": ""
       },
       "task-1": {
         "id": "task-1",
         "title": "Walk the Dog",
         "description": "Park, leash...",
-        "deadline": "15 July",
-        "completed": ""
+        "dueDate": "15 July",
+        "status": ""
       },
       "task-2": {
         "id": "task-2",
         "title": "Finish Homework",
         "description": "Math assignment, English essay...",
-        "deadline": "20 August",
-        "completed": ""
+        "dueDate": "20 August",
+        "status": ""
       },
       "task-3": {
         "id": "task-3",
         "title": "Call Mom",
         "description": "Check in, chat about weekend plans...",
-        "deadline": "20 April",
-        "completed": ""
+        "dueDate": "20 April",
+        "status": ""
       },
       "task-4": {
         "id": "task-4",
         "title": "Go for a Run",
         "description": "5km route, running shoes...",
-        "deadline": "16 May",
-        "completed": ""
+        "dueDate": "16 May",
+        "status": ""
       }
     },
 "columns": { 
