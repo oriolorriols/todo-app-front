@@ -104,6 +104,8 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
                 placeholder="Description"
               ></textarea>
 
+              <input type="date" name="" id="" />
+
               <div onClick={handleAddToDo} className="flex"> 
                  <div className=" flex cursor-pointer">
                    <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
