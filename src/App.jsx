@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { Button, Modal } from "flowbite-react";
+
 import Header from "./components/header/header";
+import FullItem from "./components/full-item/full-item"
+import EraseItem from "./components/erase-item/erase-item";
 import ToDoLists from "./components/todo-list/todo-list"
 import lists from "./lists/toDoItemLists.json"
 
@@ -9,8 +13,15 @@ import "./App.scss";
 function App() {
  
 
-  const [toDoList, setToDoList] = useState(lists);
+  const [toDoList, setToDoList] = useState(lists)
+  const [activeItem, setActiveItem] = useState({})
+  const [openModal, setOpenModal] = useState(false);
+  const [trashModal, setTrashModal] = useState(false)
   
+  function changeModalStatus(value){
+    setOpenModal(value)
+    setTrashModal(value)
+  }
 
   const addToDoItem = (title, description, column) => {
     const newDate = new Date();
@@ -63,6 +74,7 @@ function App() {
 
     return largestId + 1;
   }
+
   function handleEditClick(item) {
       const updatedToDoItemList = { ...toDoList.toDoItemList }
       const updatedItem = { ...updatedToDoItemList[item.id] }
@@ -75,6 +87,13 @@ function App() {
           ...toDoList,
           toDoItemList: updatedToDoItemList
       });
+
+
+      // Modal
+      let activeItem = item
+      setActiveItem(activeItem)
+      setOpenModal(true)
+
     }
 
 /* exitEditMode()
@@ -193,8 +212,20 @@ function App() {
     setToDoList(newState);
   }
 
+
+function eraseModal(item){
+  let activeItem = item
+  setActiveItem(activeItem)
+  setTrashModal(true)
+}
+
   function eraseItem(item) {
-    const updatedToDoItemList = Object.fromEntries(
+    let activeItem = item
+    setActiveItem(activeItem)
+    setTrashModal(true)
+
+    if(trashModal === true){
+      const updatedToDoItemList = Object.fromEntries(
         Object.entries(toDoList.toDoItemList)
             .filter((key) => key !== item.id)
     );
@@ -209,17 +240,28 @@ function App() {
         toDoItemList: updatedToDoItemList,
         columns: updatedColumns
     });
+    setTrashModal(false)
+    }
 }
 
   return (
     <>
     <div className="all-container">
 
+    <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+      <FullItem item={activeItem} changeModalStatus={changeModalStatus}></FullItem>
+    </Modal>
+
+    <Modal show={trashModal} size="md" onClose={() => setTrashModal(false)} popup>
+      <EraseItem item={activeItem} changeModalStatus={changeModalStatus} eraseItem={eraseItem}></EraseItem>
+    </Modal>
   
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
 
       <div className=" flex">
+
+
 
       <DragDropContext onDragEnd={handleDragDrop}>
         {toDoList.columnOrder.map((item) => {

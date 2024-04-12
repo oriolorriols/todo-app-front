@@ -1,18 +1,23 @@
 @import 'colors';
 
 body {
-  background-color: $backgroundcolor;
+  //background-color: $backgroundcolor;
   color: $font-color;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-style: 300;
+
+  background-image: url(/src/assets/background.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .container-lists{
   overflow-x: scroll;
   position: absolute;
   bottom: 0;
-  top: 125px;
+  top: 80px;
   right: 0;
   left: 0;
 }

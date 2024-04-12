@@ -32,12 +32,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
         </>
         )}
       </div>
-
-
-      
-      
-      
-      
+     
      
       <div className="flex justify-between mt-6">
         <div className="itemfunctions">

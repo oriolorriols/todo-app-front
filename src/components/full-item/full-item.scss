@@ -1,0 +1,30 @@
+@import '../../colors.scss';
+
+.modal-backdrop{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.637);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: -2;
+}
+
+.fullitem .modal-body{
+    height: 400px;
+    width: 500px;
+    background-color: $listColor;
+    color: $font-color;
+    border-radius: 10px;
+    box-shadow: 8px 10px 20px 0px rgba(0, 0, 0, 0.377);
+}
+
+
+.fullitem .modal-body input[type="text"], .modal-body textarea{
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    overflow-wrap: break-word;
+    padding: 5px;
+    color: $secondary-font-color;
+}
