@@ -34,7 +34,7 @@
 
 .toDoItem:hover, .toDoItem:active{
     outline-style: solid;
-    outline-color: $font-color;
+    outline-color: $outlineColor;
 }
 
 .toDoItem .itemfunctions{

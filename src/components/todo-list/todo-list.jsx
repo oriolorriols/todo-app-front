@@ -88,16 +88,20 @@ function ToDoLists(
          <div className="flex justify-between">
            {columnTitle ? (
              <>
-               <h3 className="text-black">{column.title}</h3>
-               <div className="flex">
-                 <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" />
+               <h3>{column.title}</h3>
+               <div className="icons flex">
+                 <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" className="cursor-pointer"/>
                  <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="/src/assets/delete.svg" width="18px" alt="" />
                </div>
              </>
            ) : ( 
              <>
-               <input type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
-               <button onClick={handleColumnTitle}>Save</button>
+               <input className="inputTitle" type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
+               <div className="flex cursor-pointer" onClick={handleColumnTitle}>
+                <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
+                <button>Save</button>
+               </div>
+               
              </> 
            )}
          </div>

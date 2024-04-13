@@ -79,13 +79,6 @@ function App() {
           ...toDoList,
           toDoItemList: updatedToDoItemList
       });
-
-
-      // Modal
-      let activeItem = item
-      setActiveItem(activeItem)
-      setOpenModal(true)
-
     }
 
   function handleEditInputChange(e, item, toChange) {
@@ -168,6 +161,7 @@ function App() {
           columnOrder: newColumnOrder
       }
       setToDoList(newState);
+      return
     }
 
     const start = toDoList.columns[source.droppableId]
@@ -323,11 +317,7 @@ function App() {
   
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
-
       <div className="flex">
-
-
-
       <DragDropContext onDragEnd={handleDragDrop}>
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {provided => (
@@ -359,15 +349,18 @@ function App() {
         )}
       
       
-      </Droppable>
-          </DragDropContext>
+        </Droppable>
+      </DragDropContext>
           <div>
-          <div className="list w-96 mt-5 mr-4 p-6">
-            <h3>Add another list</h3>
-            <button onClick={addColumn}> add </button>
+            <div className="list addlist w-96 mt-5 mr-4 px-4 py-5">
+              <div onClick={addColumn} className="addtaskbutton flex cursor-pointer p-2"> 
+                 <div className="flex">
+                   <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
+                   <button>Add list</button>
+                 </div>
+               </div>
+            </div>
           </div>
-          </div>
-          
         </div>     
       </div>  
     </div>
