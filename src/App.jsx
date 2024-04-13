@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import { Button, Modal } from "flowbite-react";
+import { useState } from "react"
+import { DragDropContext } from "react-beautiful-dnd"
+import { Button, Modal } from "flowbite-react"
 
-import Header from "./components/header/header";
-import FullItem from "./components/full-item/full-item"
-import EraseItem from "./components/erase-item/erase-item";
+import Header from "./components/header/header"
+import EraseItem from "./components/erase-item/erase-item"
+import EraseColumn from "./components/erase-column/erase-column"
 import ToDoLists from "./components/todo-list/todo-list"
 import lists from "./lists/toDoItemLists.json"
 
@@ -12,28 +12,24 @@ import "./App.scss";
 
 function App() {
  
-
   const [toDoList, setToDoList] = useState(lists)
+
   const [activeItem, setActiveItem] = useState({})
-  const [openModal, setOpenModal] = useState(false);
-  const [trashModal, setTrashModal] = useState(false)
+  const [trashModalItem, setTrashModalItem] = useState(false)
+
+  const [activeColumn, setActiveColumn] = useState({})
+  const [trashModalColumn, setTrashModalColumn] = useState(false)
+
   
-  function changeModalStatus(value){
-    setOpenModal(value)
-    setTrashModal(value)
+  function changeModalStatus(value, modal){
+    if(modal === "item"){
+    setTrashModalItem(value)}
+    if(modal === "column"){
+    setTrashModalColumn(value)
+    }
   }
 
-  const addToDoItem = (title, description, column) => {
-    const newDate = new Date();
-    const dayOfMonth = newDate.getDate();
-    const month = newDate.getMonth();
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June", 
-      "July", "August", "September", "October", "November", "December"
-    ];
-    const monthName = monthNames[month];
-    const dueDate = `${dayOfMonth + Math.floor(Math.random() * 25) + 1} ${monthName}`;
-
+  const addToDoItem = (title, description, dueDate, column) => {
     const newItem = {
       id: "task-" + getID(),
       title,
@@ -42,23 +38,19 @@ function App() {
       status: "",
     };
 
-    if(title==="") {} 
-    else {  
-      const updatedColumns = { ...toDoList.columns };
-      const newTaskIds = [...updatedColumns[column.id].taskIds, newItem.id];
-      updatedColumns[column.id].taskIds = newTaskIds;
-  
-      // Update the toDoList state with the new item and updated column
-      setToDoList({
-        ...toDoList,
-        toDoItemList: {
-          ...toDoList.toDoItemList,
-          [newItem.id]: newItem,
-        },
-        columns: updatedColumns,
-      });
-  
-  };
+     const updatedColumns = { ...toDoList.columns };
+     const newTaskIds = [...updatedColumns[column.id].taskIds, newItem.id];
+     updatedColumns[column.id].taskIds = newTaskIds;
+
+     // Update the toDoList state with the new item and updated column
+     setToDoList({
+       ...toDoList,
+       toDoItemList: {
+         ...toDoList.toDoItemList,
+         [newItem.id]: newItem,
+       },
+       columns: updatedColumns,
+     });
 }
 
   function getID() {
@@ -96,28 +88,26 @@ function App() {
 
     }
 
-/* exitEditMode()
-  function exitEditMode(){
-    const updatedToDoItemList = { ...toDoList.toDoItemList }
-    for (const itemId in updatedToDoItemList){
-      updatedToDoItemList[itemId].edit = false
-    }
-    setToDoList({
-      ...toDoList,
-      toDoItemList: updatedToDoItemList
-  });
-  }
-*/
-
   function handleEditInputChange(e, item, toChange) {
     const updatedToDoItemList = { ...toDoList.toDoItemList }
     const updatedItem = { ...updatedToDoItemList[item.id] }
+
+    const updatedColumnList = { ...toDoList.columns }
+    const updatedCollumnTitle = { ...updatedColumnList[item.id]}
 
     function changeToDoITemList(){
       updatedToDoItemList[item.id] = updatedItem
       setToDoList({
           ...toDoList,
           toDoItemList: updatedToDoItemList
+      });
+    }
+
+    function changeToDoColumnList(){
+      updatedColumnList[item.id] = updatedCollumnTitle
+      setToDoList({
+          ...toDoList,
+          columns: updatedColumnList
       });
     }
 
@@ -131,7 +121,12 @@ function App() {
         changeToDoITemList()
         break
       case "column-title":
-        console.log("trying to change title?")
+        updatedCollumnTitle.title = e.target.value
+        changeToDoColumnList()
+        break
+      case "date":
+        updatedItem.dueDate = e.target.value
+        changeToDoITemList()
         break
     }
 
@@ -143,7 +138,7 @@ function App() {
     const updatedItem = { ...updatedToDoItemList[item.id] }
 
     if (updatedItem.status === "done") {
-      updatedItem.status = ""
+      updatedItem.status = "toDo"
     } else {
       updatedItem.status = "done"
     }
@@ -213,18 +208,11 @@ function App() {
   }
 
 
-function eraseModal(item){
-  let activeItem = item
-  setActiveItem(activeItem)
-  setTrashModal(true)
-}
-
   function eraseItem(item) {
-    let activeItem = item
-    setActiveItem(activeItem)
-    setTrashModal(true)
+    setActiveItem(item)
+    setTrashModalItem(true)
 
-    if(trashModal === true){
+    if(trashModalItem === true){
       const updatedToDoItemList = Object.fromEntries(
         Object.entries(toDoList.toDoItemList)
             .filter((key) => key !== item.id)
@@ -240,26 +228,90 @@ function eraseModal(item){
         toDoItemList: updatedToDoItemList,
         columns: updatedColumns
     });
-    setTrashModal(false)
+    setTrashModalItem(false)
     }
+}
+
+  const addColumn = () => {
+    
+    function getHighestColumnId() {
+      let highestId = 0;
+      for (const columnId of toDoList.columnOrder) {
+        const id = columnId.slice(-1);
+        if (id > highestId) {
+          highestId = Number(id)
+        }
+      }
+      return "column-" + Number(highestId + 1);
+    }
+
+    let newColumnId = getHighestColumnId().toString();
+    const newColumn = {
+      id: newColumnId,
+      title: "New Column",
+      taskIds: []
+    };
+
+    const updatedColumns = {
+      ...toDoList.columns,
+      [newColumnId]: newColumn
+    };
+
+    const updatedColumnOrder = [...toDoList.columnOrder, newColumnId];
+
+    setToDoList({
+      ...toDoList,
+      columns: updatedColumns,
+      columnOrder: updatedColumnOrder
+    });
+  };
+
+
+  function deleteColumn(column) {
+    setActiveColumn(column)
+    setTrashModalColumn(true)
+
+    if(trashModalColumn === true){
+      
+    const deletedColumn = toDoList.columns[column.id];
+
+    const updatedToDoItemList = { ...toDoList.toDoItemList };
+    deletedColumn.taskIds.forEach((taskId) => {
+      delete updatedToDoItemList[taskId];
+    });
+
+    const updatedColumnOrder = toDoList.columnOrder.filter(
+      (columnId) => columnId !== column.id
+    );
+  
+    const { [column.id]: deleted, ...updatedColumns } = toDoList.columns;
+  
+    setToDoList({
+      ...toDoList,
+      toDoItemList: updatedToDoItemList,
+      columns: updatedColumns,
+      columnOrder: updatedColumnOrder,
+    });
+    setTrashModalColumn(false)
+  }
 }
 
   return (
     <>
     <div className="all-container">
 
-    <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-      <FullItem item={activeItem} changeModalStatus={changeModalStatus}></FullItem>
+    <Modal show={trashModalItem} size="md" onClose={() => setTrashModalItem(false)} popup>
+      <EraseItem item={activeItem} changeModalStatus={changeModalStatus} eraseItem={eraseItem}></EraseItem>
     </Modal>
 
-    <Modal show={trashModal} size="md" onClose={() => setTrashModal(false)} popup>
-      <EraseItem item={activeItem} changeModalStatus={changeModalStatus} eraseItem={eraseItem}></EraseItem>
+    <Modal show={trashModalColumn} size="md" onClose={() => setTrashModalColumn(false)} popup>
+      <EraseColumn activeColumn={activeColumn} changeModalStatus={changeModalStatus} deleteColumn={deleteColumn}></EraseColumn>
     </Modal>
   
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
 
-      <div className=" flex">
+      <div className="flex">
 
 
 
@@ -279,11 +331,19 @@ function eraseModal(item){
             column={column}
             eraseItem={eraseItem}
             addToDoItem={addToDoItem}
+            deleteColumn={deleteColumn}
             ></ToDoLists>
             </div>
           )
       })}
           </DragDropContext>
+          <div>
+          <div className="list w-96 mt-5 mr-4 p-6">
+            <h3>Add another list</h3>
+            <button onClick={addColumn}> add </button>
+          </div>
+          </div>
+          
         </div>     
       </div>  
     </div>

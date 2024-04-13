@@ -2,44 +2,44 @@
   "toDoItemList":  {
       "task-0": {
         "id": "task-0",
-        "title": "Buy Groceries",
-        "description": "Apples, Oranges...",
-        "dueDate": "17 July",
-        "status": ""
+        "title": "To Do App",
+        "description": "Backend needs some work...",
+        "dueDate": "2024-04-18",
+        "status": "toDo" 
       },
       "task-1": {
         "id": "task-1",
-        "title": "Walk the Dog",
-        "description": "Park, leash...",
-        "dueDate": "15 July",
-        "status": ""
+        "title": "To Do App",
+        "description": "Front End CSS",
+        "dueDate": "2024-04-18",
+        "status": "doDo"
       },
       "task-2": {
         "id": "task-2",
         "title": "Finish Homework",
         "description": "Math assignment, English essay...",
-        "dueDate": "20 August",
-        "status": ""
+        "dueDate": "2024-04-30",
+        "status": "toDo"
       },
       "task-3": {
         "id": "task-3",
         "title": "Call Mom",
         "description": "Check in, chat about weekend plans...",
-        "dueDate": "20 April",
-        "status": ""
+        "dueDate": "2024-04-20",
+        "status": "toDo"
       },
       "task-4": {
         "id": "task-4",
-        "title": "Go for a Run",
-        "description": "5km route, running shoes...",
-        "dueDate": "16 May",
-        "status": ""
+        "title": "Buy Water",
+        "description": "",
+        "dueDate": "2024-04-23",
+        "status": "toDo"
       }
     },
 "columns": { 
       "column-1": {
         "id": "column-1",
-        "title": "Today",
+        "title": "FSD Master 24",
         "taskIds": [
           "task-0",
           "task-1"
@@ -47,7 +47,7 @@
       },
       "column-2": {
         "id": "column-2",
-        "title": "Tomorrow",
+        "title": "Works",
         "taskIds": [
           "task-2",
           "task-3"
@@ -55,13 +55,8 @@
       },
       "column-3": {
         "id": "column-3",
-        "title": "This week",
+        "title": "Shopping List",
         "taskIds": ["task-4"]
-      },
-      "column-4": {
-        "id": "column-4",
-        "title": "This month",
-        "taskIds": []
       }
     
   },
@@ -69,7 +64,6 @@
   "columnOrder": [
     "column-1",
     "column-2",
-    "column-3", 
-    "column-4"
+    "column-3"
   ]
 }

@@ -4,11 +4,14 @@ import "./todo-list.scss";
 import { useState } from "react";
 
 
-function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem, addToDoItem }) {
+function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem, addToDoItem, deleteColumn }) {
   
   const [localTitle, setLocalTitle] = useState("")
   const [localDescription, setLocalDescription] = useState("")
-  const [addTask, setAddTask] = useState(true)
+  const [localDueDate, setLocalDueDate] = useState("")
+  const [addTask, setAddTask] = useState(false)
+  const [columnTitle, setColumnTitle] = useState(true)
+
 
   const handleTitleChange = (e) => {
     setLocalTitle(e.target.value);
@@ -16,6 +19,19 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
 
   const handleDescriptionChange = (e) => {
     setLocalDescription(e.target.value)
+  }
+
+  const handleDateChange = (e) => {
+    setLocalDueDate(e.target.value)
+  }
+
+  const handleColumnTitle = () => {
+    if(columnTitle == true){
+      setColumnTitle(false)
+    } else {
+      setColumnTitle(true)
+    }
+    
   }
 
   function setTask() {
@@ -33,20 +49,47 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
     e.preventDefault()
     const title = localTitle
     const description = localDescription
-    addToDoItem(title, description, column)
-  
-    setLocalTitle("")
-    setLocalDescription("")
+    const dueDate = localDueDate
 
-    let task = true
-    setAddTask(task)
+    if (!title) {
+      alert("Please enter a title for the task.")
+      return
+    }
+    if (!dueDate) {
+      alert("Please select a due date for the task.")
+      return
+    }
+    addToDoItem(title, description, dueDate, column);
+    setLocalTitle("");
+    setLocalDescription("");
+    setLocalDueDate("");
+    setAddTask(false);
   };
+
+  const cancelAddToDo = (e) => {
+    setAddTask(false)
+  }
 
   return (
       <div className="list w-96 mt-5 mr-4 p-6">
           <div className="flex justify-between">
-            <h3 onDoubleClick={ (e) => handleEditInputChange(e, column.id, 'column-title')} className="text-black">{column.title}</h3>
-            <img src="/src/assets/edit.svg" width="18px" alt="" />
+
+          {columnTitle ? (
+            <>
+              <h3 className="text-black">{column.title}</h3>
+              <div className="flex">
+                <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" />
+                <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="/src/assets/delete.svg" width="18px" alt="" />
+              </div>
+              
+            </>
+          ) : ( 
+            <>
+              <input type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
+              <button onClick={handleColumnTitle}>Save</button>
+            </> 
+          )}
+
           </div>
          
           <Droppable
@@ -66,8 +109,7 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
                         handleEditClick={handleEditClick}
                         handleEditInputChange={handleEditInputChange}
                         canEdit={item.edit}
-                        eraseItem={eraseItem}
-                        column={column}>
+                        eraseItem={eraseItem}>
                       </ToDoItem>
                       </div>
                     )}}
@@ -79,7 +121,7 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
           </Droppable>
 
             <div>
-            {addTask ? (
+            {!addTask ? (
               <div className="addtaskbutton flex cursor-pointer p-2" onClick={setTask}> 
                 <div className="flex">
                   <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
@@ -88,30 +130,34 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
               </div>
 
             ) : (
-              <div className="addtask">
+              <div className="addtask p-5">
               <input
                 className="mb-2"
                 type="text"
                 onChange={handleTitleChange}
                 value={localTitle}
-                placeholder="Title"
+                placeholder="Enter a title for this card"
+                required
               />
               <textarea
                 type="textarea"
                 onChange={handleDescriptionChange}
                 rows={localDescription.length / 27}
                 value={localDescription}
-                placeholder="Description"
+                placeholder="Write a description"
               ></textarea>
 
-              <input type="date" name="" id="" />
+              <input type="date" name="" id="" onChange={handleDateChange} required/>
 
-              <div onClick={handleAddToDo} className="flex"> 
-                 <div className=" flex cursor-pointer">
+              <div className="flex justify-between mt-5 mb-1 mx-2"> 
+                <button onClick={cancelAddToDo}>Cancel</button>
+                 <div onClick={handleAddToDo} className=" flex cursor-pointer">
                    <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
-                   <button>Save</button>
+                   <button type="submit">Save</button>
                  </div>
+                 
               </div>
+              
               
             
               </div>
