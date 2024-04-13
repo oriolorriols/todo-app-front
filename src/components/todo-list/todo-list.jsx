@@ -4,7 +4,17 @@ import "./todo-list.scss";
 import { useState } from "react";
 
 
-function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone, column, eraseItem, addToDoItem, deleteColumn }) {
+function ToDoLists(
+    {handleEditClick, 
+    handleEditInputChange, 
+    toDoList, 
+    setToDone, 
+    column,
+    eraseItem, 
+    addToDoItem, 
+    deleteColumn, 
+    index}) 
+  {
   
   const [localTitle, setLocalTitle] = useState("")
   const [localDescription, setLocalDescription] = useState("")
@@ -71,100 +81,92 @@ function ToDoLists({handleEditClick, handleEditInputChange, toDoList, setToDone,
   }
 
   return (
-      <div className="list w-96 mt-5 mr-4 p-6">
-          <div className="flex justify-between">
+   <Draggable draggableId={column.id} index={index}> 
+    {(provided) => (
 
-          {columnTitle ? (
-            <>
-              <h3 className="text-black">{column.title}</h3>
-              <div className="flex">
-                <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" />
-                <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="/src/assets/delete.svg" width="18px" alt="" />
-              </div>
-              
-            </>
-          ) : ( 
-            <>
-              <input type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
-              <button onClick={handleColumnTitle}>Save</button>
-            </> 
-          )}
-
-          </div>
-         
-          <Droppable
-            droppableId={column.id} type="group">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className="grid mt-5">
-                {toDoList.map((item, index) => (
-                  <Draggable draggableId={item.id} key={item.id} index={index}>
-                    {(provided) => { return (
-                      <div {...provided.dragHandleProps} 
-                      {...provided.draggableProps}
-                      ref={provided.innerRef}>                        
-                      <ToDoItem
-                        item={item}
-                        setToDone={setToDone}
-                        letsCheck={item.status}
-                        handleEditClick={handleEditClick}
-                        handleEditInputChange={handleEditInputChange}
-                        canEdit={item.edit}
-                        eraseItem={eraseItem}>
-                      </ToDoItem>
-                      </div>
-                    )}}
-                  </Draggable>
-                ))}
-              {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-            <div>
-            {!addTask ? (
-              <div className="addtaskbutton flex cursor-pointer p-2" onClick={setTask}> 
-                <div className="flex">
-                  <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
-                  <button>Add task</button>
-                </div>
-              </div>
-
-            ) : (
-              <div className="addtask p-5">
-              <input
-                className="mb-2"
-                type="text"
-                onChange={handleTitleChange}
-                value={localTitle}
-                placeholder="Enter a title for this card"
-                required
-              />
-              <textarea
-                type="textarea"
-                onChange={handleDescriptionChange}
-                rows={localDescription.length / 27}
-                value={localDescription}
-                placeholder="Write a description"
-              ></textarea>
-
-              <input type="date" name="" id="" onChange={handleDateChange} required/>
-
-              <div className="flex justify-between mt-5 mb-1 mx-2"> 
-                <button onClick={cancelAddToDo}>Cancel</button>
-                 <div onClick={handleAddToDo} className=" flex cursor-pointer">
-                   <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
-                   <button type="submit">Save</button>
-                 </div>
-                 
-              </div>
-              
-              
-            
-              </div>
-              )}
-            </div>        
-      
-        </div>
+    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="list w-96 mt-5 mr-4 p-6">
+         <div className="flex justify-between">
+           {columnTitle ? (
+             <>
+               <h3 className="text-black">{column.title}</h3>
+               <div className="flex">
+                 <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" />
+                 <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="/src/assets/delete.svg" width="18px" alt="" />
+               </div>
+             </>
+           ) : ( 
+             <>
+               <input type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
+               <button onClick={handleColumnTitle}>Save</button>
+             </> 
+           )}
+         </div>
+         <Droppable
+           droppableId={column.id} type="group">
+             {(provided) => (
+               <div {...provided.droppableProps} ref={provided.innerRef} className="grid mt-5">
+                 {toDoList.map((item, index) => (
+                   <Draggable draggableId={item.id} key={item.id} index={index}>
+                     {(provided) => { return (
+                       <div {...provided.dragHandleProps} 
+                       {...provided.draggableProps}
+                       ref={provided.innerRef}>                        
+                       <ToDoItem
+                         item={item}
+                         setToDone={setToDone}
+                         letsCheck={item.status}
+                         handleEditClick={handleEditClick}
+                         handleEditInputChange={handleEditInputChange}
+                         canEdit={item.edit}
+                         eraseItem={eraseItem}>
+                       </ToDoItem>
+                       </div>
+                     )}}
+                   </Draggable>
+                 ))}
+                 {provided.placeholder}
+               </div>
+             )}
+         </Droppable>
+         <div>
+           {!addTask ? (
+             <div className="addtaskbutton flex cursor-pointer p-2" onClick={setTask}> 
+               <div className="flex">
+                 <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
+                 <button>Add task</button>
+               </div>
+             </div>
+           ) : (
+             <div className="addtask p-5">
+               <input
+                 className="mb-2"
+                 type="text"
+                 onChange={handleTitleChange}
+                 value={localTitle}
+                 placeholder="Enter a title for this card"
+                 required
+               />
+               <textarea
+                 type="textarea"
+                 onChange={handleDescriptionChange}
+                 rows={localDescription.length / 27}
+                 value={localDescription}
+                 placeholder="Write a description"
+               ></textarea>
+               <input type="date" name="" id="" onChange={handleDateChange} required/>
+               <div className="flex justify-between mt-5 mb-1 mx-2"> 
+                 <button onClick={cancelAddToDo}>Cancel</button>
+                   <div onClick={handleAddToDo} className=" flex cursor-pointer">
+                     <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
+                     <button type="submit">Save</button>
+                   </div>
+               </div>
+             </div>
+           )}
+         </div>   
+    </div>
+    )}
+    </Draggable>
     );
   }
   

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { DragDropContext } from "react-beautiful-dnd"
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { Button, Modal } from "flowbite-react"
 
 import Header from "./components/header/header"
@@ -153,9 +153,22 @@ function App() {
   }
 
   const handleDragDrop = (results) => {
-    const {source, destination, draggableId} = results
+    const {source, destination, draggableId, type} = results
     if (!destination) return 
     if (source.droppableId === destination.droppableId  && source.index === destination.index)  return
+
+
+    if(type === "column") {
+      const newColumnOrder = Array.from(toDoList.columnOrder)
+      newColumnOrder.splice(source.index, 1)
+      newColumnOrder.splice(destination.index, 0, draggableId)
+
+      const newState = {
+        ...toDoList,
+          columnOrder: newColumnOrder
+      }
+      setToDoList(newState);
+    }
 
     const start = toDoList.columns[source.droppableId]
     const finish = toDoList.columns[destination.droppableId]
@@ -316,26 +329,37 @@ function App() {
 
 
       <DragDropContext onDragEnd={handleDragDrop}>
-        {toDoList.columnOrder.map((item) => {
-          const column = toDoList.columns[item]
-          const tasks = toDoList.columns[item].taskIds.map(
-            taskId => toDoList.toDoItemList[taskId]
-          )
-          return (
-          <div key={column.id}> 
-            <ToDoLists 
-            handleEditInputChange={handleEditInputChange}
-            handleEditClick={handleEditClick}
-            toDoList={tasks}
-            setToDone={setToDone}
-            column={column}
-            eraseItem={eraseItem}
-            addToDoItem={addToDoItem}
-            deleteColumn={deleteColumn}
-            ></ToDoLists>
-            </div>
-          )
-      })}
+        <Droppable droppableId="all-columns" direction="horizontal" type="column">
+        {provided => (
+          <div ref={provided.innerRef} {...provided.droppableProps}  className="flex">
+
+            {toDoList.columnOrder.map((item, index) => {
+              const column = toDoList.columns[item]
+              const tasks = toDoList.columns[item].taskIds.map(
+                taskId => toDoList.toDoItemList[taskId]
+              )
+              return (
+              <div key={column.id}> 
+                <ToDoLists 
+                handleEditInputChange={handleEditInputChange}
+                handleEditClick={handleEditClick}
+                toDoList={tasks}
+                setToDone={setToDone}
+                column={column}
+                eraseItem={eraseItem}
+                addToDoItem={addToDoItem}
+                deleteColumn={deleteColumn}
+                index={index}
+                ></ToDoLists>
+                </div>
+              )
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      
+      
+      </Droppable>
           </DragDropContext>
           <div>
           <div className="list w-96 mt-5 mr-4 p-6">
