@@ -7,7 +7,7 @@ import EraseItem from "./components/erase-item/erase-item"
 import EraseColumn from "./components/erase-column/erase-column"
 import ToDoLists from "./components/todo-list/todo-list"
 
-import { getTasks, getColumns, getOrder } from "./apiService/userApi"
+import { getTasks, getColumns, getOrder, updateColumnOrder, updateTaskOrder, addTaks, updateColumn} from "./apiService/userApi"
 
 import "./App.scss";
 import { useEffect } from "react"
@@ -26,23 +26,17 @@ function App() {
   const [trashModalColumn, setTrashModalColumn] = useState(false)
 
 
-  useEffect(() => {
-    const getAllTasks = async () => {
-      const alltasks = await getTasks();
-      setAllTasks(alltasks)
-    }
-    const getAllColumns = async () => {
-      const allcolumns = await getColumns();
-      setColumns(allcolumns)
-    } 
-    const getAllOrder = async () => {
-      const order = await getOrder();
-      setOrderColumns(order[0].columnOrder)
-    }
-    getAllTasks()
-    getAllColumns()
-    getAllOrder()
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const tasks = await getTasks();
+    const cols = await getColumns();
+    const order = await getOrder();
+    setAllTasks(tasks);
+    setColumns(cols);
+    setOrderColumns(order[0].columnOrder);
+  };
+  fetchData();
+}, []);
 
   function changeModalStatus(value, modal){
     if(modal === "item"){
@@ -54,28 +48,25 @@ function App() {
 
   const addToDoItem = (title, description, dueDate, column) => {
     const newItem = {
-      id: "task-" + getID(),
+      id: "task-45",
       title,
       description,
       dueDate,
-      status: "",
+      status: "toDo",
     };
 
-     const updatedColumns = { ...toDoList.columns };
-     const newTaskIds = [...updatedColumns[column.id].taskIds, newItem.id];
-     updatedColumns[column.id].taskIds = newTaskIds;
+     const updatedColumns = { ...columns }
+     const newTaskIds = [...updatedColumns.find(col => col.id === column.id).taskIds, newItem.id]
+     updatedColumns.find(col => col.id === column.id).taskIds = newTaskIds;
+     
+     addTaks(newItem)
+     updateColumn(column.id, updatedColumns)
 
-     // Update the toDoList state with the new item and updated column
-     setToDoList({
-       ...toDoList,
-       toDoItemList: {
-         ...toDoList.toDoItemList,
-         [newItem.id]: newItem,
-       },
-       columns: updatedColumns,
-     });
+     const newTasks = { ...allTasks, newItem}
+     setAllTasks(newTasks)
+     setColumns(updatedColumns);
 }
-
+/*
   function getID() {
     const updatedToDoItemList = Object.values(toDoList.toDoItemList);
     let largestId = 0;
@@ -89,7 +80,7 @@ function App() {
 
     return largestId + 1;
   }
-
+*/
   function handleEditClick(item) {
       const updatedToDoItemList = { ...toDoList.toDoItemList }
       const updatedItem = { ...updatedToDoItemList[item.id] }
@@ -169,73 +160,62 @@ function App() {
   }
 
   const handleDragDrop = (results) => {
-    const {source, destination, draggableId, type} = results
-    if (!destination) return 
-    if (source.droppableId === destination.droppableId  && source.index === destination.index)  return
+    const { source, destination, draggableId, type } = results;
+    if (!destination) return;
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
-
-    if(type === "column") {
-      const newColumnOrder = Array.from(toDoList.columnOrder)
-      newColumnOrder.splice(source.index, 1)
-      newColumnOrder.splice(destination.index, 0, draggableId)
-
-      const newState = {
-        ...toDoList,
-          columnOrder: newColumnOrder
-      }
-      setToDoList(newState);
-      return
-    }
-
-    const start = toDoList.columns[source.droppableId]
-    const finish = toDoList.columns[destination.droppableId]
-
-    if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds,
-      };
-
-      const newState = {
-        ...toDoList,
-        columns: {
-          ...toDoList.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      setToDoList(newState);
+    if (type === "column") {
+      const newColumnOrder = Array.from(orderColumns);
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
+      setOrderColumns(newColumnOrder);
+   
+      updateColumnOrder(newColumnOrder);
       return;
     }
 
-    const startTaskIds = Array.from(start.taskIds);
+    const startColumnId = source.droppableId;
+    const finishColumnId = destination.droppableId;
+
+    if (startColumnId === finishColumnId) {
+      const column = columns.find((col) => col.id === startColumnId);
+      if (!column) return;
+
+      const newTaskIds = Array.from(column.taskIds);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      setColumns((prevColumns) =>
+        prevColumns.map((col) =>
+          col.id === startColumnId ? { ...col, taskIds: newTaskIds } : col
+        )
+      );
+      // Actualiza el orden de las tareas en la misma columna en la base de datos
+      updateTaskOrder(startColumnId, newTaskIds);
+      return;
+    }
+
+    const startColumn = columns.find((col) => col.id === startColumnId);
+    const finishColumn = columns.find((col) => col.id === finishColumnId);
+    if (!startColumn || !finishColumn) return;
+
+    const startTaskIds = Array.from(startColumn.taskIds);
     startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
 
-    const finishTaskIds = Array.from(finish.taskIds);
+    const finishTaskIds = Array.from(finishColumn.taskIds);
     finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
 
-    const newState = {
-      ...toDoList,
-      columns: {
-        ...toDoList.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      },
-    };
-    setToDoList(newState);
-  }
+    setColumns((prevColumns) =>
+      prevColumns.map((col) => {
+        if (col.id === startColumnId) return { ...col, taskIds: startTaskIds };
+        if (col.id === finishColumnId) return { ...col, taskIds: finishTaskIds };
+        return col;
+      })
+    );
+    // Actualiza el orden de las tareas entre columnas en la base de datos
+    updateTaskOrder(startColumnId, startTaskIds);
+    updateTaskOrder(finishColumnId, finishTaskIds);
+  };
 
   function eraseItem(item) {
     setActiveItem(item)
@@ -325,7 +305,7 @@ function App() {
   }
 }
 
-
+/*
 return (
   <>
   {orderColumns.map((item) => {
@@ -346,71 +326,72 @@ return (
 
   </>
 )
-}
-
-/*
- return (
-    <>
-    <div className="all-container">
-
-    <Modal show={trashModalItem} size="md" onClose={() => setTrashModalItem(false)} popup>
-      <EraseItem item={activeItem} changeModalStatus={changeModalS  tatus} eraseItem={eraseItem}></EraseItem>
-    </Modal>
-
-    <Modal show={trashModalColumn} size="md" onClose={() => setTrashModalColumn(false)} popup>
-      <EraseColumn activeColumn={activeColumn} changeModalStatus={changeModalStatus} deleteColumn={deleteColumn}></EraseColumn>
-    </Modal>
-
-    <Header></Header>
-      <div className="px-20 pt-10 mx-auto container-lists">
-      <div className="flex">
-      <DragDropContext onDragEnd={handleDragDrop}>
-        <Droppable droppableId="all-columns" direction="horizontal" type="column">
-        {provided => (
-          <div ref={provided.innerRef} {...provided.droppableProps}  className="flex">
-            {orderColumns.map((orderedColumn, index) => {
-              const column = columns[orderedColumn]
-              const tasks = columns[orderedColumn].taskIds.map(
-                taskId => allTasks[taskId]
-              )
-              return (
-              <div key={column.id}> 
-                <ToDoLists 
-                handleEditInputChange={handleEditInputChange}
-                handleEditClick={handleEditClick}
-                toDoList={tasks}
-                setToDone={setToDone}
-                column={column}
-                eraseItem={eraseItem}
-                addToDoItem={addToDoItem}
-                deleteColumn={deleteColumn}
-                index={index}
-                ></ToDoLists>
-                </div>
-              )
-            })}
-            {provided.placeholder}
-          </div>
-        )}
-      
-      
-        </Droppable>
-      </DragDropContext>
-          <div>
-            <div className="list addlist w-96 mt-5 mr-4 px-4 py-5">
-              <div onClick={addColumn} className="addtaskbutton flex cursor-pointer p-2"> 
-                 <div className="flex">
-                   <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
-                   <button>Add list</button>
-                 </div>
-               </div>
-            </div>
-          </div>
-        </div>     
-      </div>  
-    </div>
-    </>
-  );
-}
 */
+
+return (
+  <>
+  <div className="all-container">
+
+  <Modal show={trashModalItem} size="md" onClose={() => setTrashModalItem(false)} popup>
+    <EraseItem item={activeItem} changeModalStatus={changeModalStatus} eraseItem={eraseItem}></EraseItem>
+  </Modal>
+
+  <Modal show={trashModalColumn} size="md" onClose={() => setTrashModalColumn(false)} popup>
+    <EraseColumn activeColumn={activeColumn} changeModalStatus={changeModalStatus} deleteColumn={deleteColumn}></EraseColumn>
+  </Modal>
+
+  <Header></Header>
+    <div className="px-20 pt-10 mx-auto container-lists">
+    <div className="flex">
+    <DragDropContext onDragEnd={handleDragDrop}>
+      <Droppable droppableId="all-columns" direction="horizontal" type="column">
+      {provided => (
+        <div ref={provided.innerRef} {...provided.droppableProps}  className="flex">
+
+          {orderColumns.map((columnId, index) => {
+            const column = columns.find(col => col.id === columnId)
+            const tasks = column.taskIds.map(
+              taskId => allTasks.find(task => task.id === taskId)
+            )
+            return (
+            <div key={column.id}> 
+              <ToDoLists 
+              handleEditInputChange={handleEditInputChange}
+              handleEditClick={handleEditClick}
+              toDoList={tasks}
+              setToDone={setToDone}
+              column={column}
+              eraseItem={eraseItem}
+              addToDoItem={addToDoItem}
+              deleteColumn={deleteColumn}
+              index={index}
+              ></ToDoLists>
+              </div>
+            )
+          })}
+          {provided.placeholder}
+        </div>
+      )}
+    
+    
+      </Droppable>
+    </DragDropContext>
+        <div>
+          <div className="list addlist w-96 mt-5 mr-4 px-4 py-5">
+            <div onClick={addColumn} className="addtaskbutton flex cursor-pointer p-2"> 
+               <div className="flex">
+                 <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
+                 <button>Add list</button>
+               </div>
+             </div>
+          </div>
+        </div>
+      </div>     
+    </div>  
+  </div>
+  </>
+);
+
+
+}
 export default App;
