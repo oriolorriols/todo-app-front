@@ -324,6 +324,8 @@ function App() {
     setTrashModalColumn(false)
   }
 }
+
+
 return (
   <>
   {orderColumns.map((item) => {
@@ -331,6 +333,17 @@ return (
       <h1>{item}</h1>
     )
   })}
+  {columns.map((item) => {
+    return(
+      <h1>{item.title}</h1>
+    )
+  })}
+  {allTasks.map((item) => {
+    return(
+      <h1>{item.title}</h1>
+    )
+  })}
+
   </>
 )
 }
