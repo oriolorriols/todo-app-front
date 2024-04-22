@@ -6,18 +6,13 @@ import Header from "./components/header/header"
 import EraseItem from "./components/erase-item/erase-item"
 import EraseColumn from "./components/erase-column/erase-column"
 import ToDoLists from "./components/todo-list/todo-list"
-
-import { getTasks, getColumns, getOrder } from "./apiService/userApi"
+import lists from "./lists/toDoItemLists.json"
 
 import "./App.scss";
-import { useEffect } from "react"
-
 
 function App() {
  
-  const [allTasks, setAllTasks] = useState([])
-  const [columns, setColumns] = useState([])
-  const [orderColumns, setOrderColumns] = useState([])
+  const [toDoList, setToDoList] = useState(lists)
 
   const [activeItem, setActiveItem] = useState({})
   const [trashModalItem, setTrashModalItem] = useState(false)
@@ -25,25 +20,7 @@ function App() {
   const [activeColumn, setActiveColumn] = useState({})
   const [trashModalColumn, setTrashModalColumn] = useState(false)
 
-
-  useEffect(() => {
-    const getAllTasks = async () => {
-      const alltasks = await getTasks();
-      setAllTasks(alltasks)
-    }
-    const getAllColumns = async () => {
-      const allcolumns = await getColumns();
-      setColumns(allcolumns)
-    } 
-    const getAllOrder = async () => {
-      const order = await getOrder();
-      setOrderColumns(order[0].columnOrder)
-    }
-    getAllTasks()
-    getAllColumns()
-    getAllOrder()
-  }, []);
-
+  
   function changeModalStatus(value, modal){
     if(modal === "item"){
     setTrashModalItem(value)}
@@ -237,6 +214,7 @@ function App() {
     setToDoList(newState);
   }
 
+
   function eraseItem(item) {
     setActiveItem(item)
     setTrashModalItem(true)
@@ -324,30 +302,19 @@ function App() {
     setTrashModalColumn(false)
   }
 }
-return (
-  <>
-  {orderColumns.map((item) => {
-    return(
-      <h1>{item}</h1>
-    )
-  })}
-  </>
-)
-}
 
-/*
- return (
+  return (
     <>
     <div className="all-container">
 
     <Modal show={trashModalItem} size="md" onClose={() => setTrashModalItem(false)} popup>
-      <EraseItem item={activeItem} changeModalStatus={changeModalS  tatus} eraseItem={eraseItem}></EraseItem>
+      <EraseItem item={activeItem} changeModalStatus={changeModalStatus} eraseItem={eraseItem}></EraseItem>
     </Modal>
 
     <Modal show={trashModalColumn} size="md" onClose={() => setTrashModalColumn(false)} popup>
       <EraseColumn activeColumn={activeColumn} changeModalStatus={changeModalStatus} deleteColumn={deleteColumn}></EraseColumn>
     </Modal>
-
+  
     <Header></Header>
       <div className="px-20 pt-10 mx-auto container-lists">
       <div className="flex">
@@ -355,10 +322,11 @@ return (
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}  className="flex">
-            {orderColumns.map((orderedColumn, index) => {
-              const column = columns[orderedColumn]
-              const tasks = columns[orderedColumn].taskIds.map(
-                taskId => allTasks[taskId]
+
+            {toDoList.columnOrder.map((item, index) => {
+              const column = toDoList.columns[item]
+              const tasks = toDoList.columns[item].taskIds.map(
+                taskId => toDoList.toDoItemList[taskId]
               )
               return (
               <div key={column.id}> 
@@ -399,5 +367,5 @@ return (
     </>
   );
 }
-*/
+
 export default App;
