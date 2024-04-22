@@ -7,7 +7,7 @@ import EraseItem from "./components/erase-item/erase-item"
 import EraseColumn from "./components/erase-column/erase-column"
 import ToDoLists from "./components/todo-list/todo-list"
 
-import { getTasks, getColumns, getOrder, updateColumnOrder, updateTaskOrder, addTaks, updateColumn} from "./apiService/userApi"
+import { getTasks, getColumns, getOrder, updateColumnOrder, updateTaskOrder, addTask, updateColumn, deleteTask, updateTask, addNewColumn, eraseColumn} from "./apiService/userApi"
 
 import "./App.scss";
 import { useEffect } from "react"
@@ -26,17 +26,17 @@ function App() {
   const [trashModalColumn, setTrashModalColumn] = useState(false)
 
 
-useEffect(() => {
-  const fetchData = async () => {
-    const tasks = await getTasks();
-    const cols = await getColumns();
-    const order = await getOrder();
-    setAllTasks(tasks);
-    setColumns(cols);
-    setOrderColumns(order[0].columnOrder);
-  };
-  fetchData();
-}, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const tasks = await getTasks();
+      const cols = await getColumns();
+      const order = await getOrder();
+      setAllTasks(tasks);
+      setColumns(cols);
+      setOrderColumns(order[0].columnOrder);
+    };
+    fetchData();
+  }, []);
 
   function changeModalStatus(value, modal){
     if(modal === "item"){
@@ -46,33 +46,34 @@ useEffect(() => {
     }
   }
 
-  const addToDoItem = (title, description, dueDate, column) => {
+  const addToDoItem = async (title, description, dueDate, column) => {
     const newItem = {
-      id: "task-45",
+      id: "task-" + getID(),
       title,
       description,
       dueDate,
       status: "toDo",
     };
+  
+    const updatedColumns = [...columns];
+    const newTaskIds = [...updatedColumns.find(col => col.id === column.id).taskIds, newItem.id];
+  
+    updatedColumns.find(col => col.id === column.id).taskIds = newTaskIds;
 
-     const updatedColumns = { ...columns }
-     const newTaskIds = [...updatedColumns.find(col => col.id === column.id).taskIds, newItem.id]
-     updatedColumns.find(col => col.id === column.id).taskIds = newTaskIds;
-     
-     addTaks(newItem)
-     updateColumn(column.id, updatedColumns)
+    setAllTasks(prevTasks => [...prevTasks, newItem]);
+    setColumns(updatedColumns);
+    
+    
+    updateColumn(column.id, updatedColumns);
+    addTask(newItem);
+  }
 
-     const newTasks = { ...allTasks, newItem}
-     setAllTasks(newTasks)
-     setColumns(updatedColumns);
-}
-/*
   function getID() {
-    const updatedToDoItemList = Object.values(toDoList.toDoItemList);
+
     let largestId = 0;
   
-    for (let i = 0; i < updatedToDoItemList.length; i++) {
-      const currentId = Number(updatedToDoItemList[i].id.slice(5));
+    for (let i = 0; i < allTasks.length; i++) {
+      const currentId = Number(allTasks[i].id.slice(5));
       if (currentId > largestId) {
         largestId = currentId;
       }
@@ -80,42 +81,38 @@ useEffect(() => {
 
     return largestId + 1;
   }
-*/
+
   function handleEditClick(item) {
-      const updatedToDoItemList = { ...toDoList.toDoItemList }
-      const updatedItem = { ...updatedToDoItemList[item.id] }
+      const updatedToDoItemList = [ ...allTasks ]
+      const updatedItem = updatedToDoItemList.find(task => task.id === item.id)
   
       updatedItem.edit = !updatedItem.edit
   
-      updatedToDoItemList[item.id] = updatedItem
+      const newList = [ ...updatedToDoItemList ]
   
-      setToDoList({
-          ...toDoList,
-          toDoItemList: updatedToDoItemList
-      });
+      setAllTasks(newList)
+      updateTask(item.id, updatedItem)
     }
 
   function handleEditInputChange(e, item, toChange) {
-    const updatedToDoItemList = { ...toDoList.toDoItemList }
-    const updatedItem = { ...updatedToDoItemList[item.id] }
+    const updatedToDoItemList = [ ...allTasks ]
+    const updatedItem = updatedToDoItemList.find(task => task.id === item.id)
 
-    const updatedColumnList = { ...toDoList.columns }
-    const updatedCollumnTitle = { ...updatedColumnList[item.id]}
+    const updatedColumnList = [ ...columns ]
+    const updatedCollumnTitle =  updatedColumnList.find(column => column.id === item.id)
 
     function changeToDoITemList(){
       updatedToDoItemList[item.id] = updatedItem
-      setToDoList({
-          ...toDoList,
-          toDoItemList: updatedToDoItemList
-      });
+
+      setAllTasks(updatedToDoItemList)
+      updateTask(item.id, updatedItem)
     }
 
     function changeToDoColumnList(){
       updatedColumnList[item.id] = updatedCollumnTitle
-      setToDoList({
-          ...toDoList,
-          columns: updatedColumnList
-      });
+
+      updateColumn(item.id, updatedColumnList)
+      setColumns(updatedColumnList)
     }
 
     switch (toChange) {
@@ -141,8 +138,8 @@ useEffect(() => {
   }
 
   function setToDone(item) {
-    const updatedToDoItemList = {...toDoList.toDoItemList }
-    const updatedItem = { ...updatedToDoItemList[item.id] }
+    const updatedToDoItemList = [ ...allTasks ]
+    const updatedItem = updatedToDoItemList.find(task => task.id === item.id)
 
     if (updatedItem.status === "done") {
       updatedItem.status = "toDo"
@@ -152,11 +149,8 @@ useEffect(() => {
 
     updatedToDoItemList[item.id] = updatedItem
 
-    setToDoList(
-      { ...toDoList,
-        toDoItemList: updatedToDoItemList
-      }
-    )
+    setAllTasks(updatedToDoItemList)
+    updateTask(item.id, updatedItem)
   }
 
   const handleDragDrop = (results) => {
@@ -190,7 +184,6 @@ useEffect(() => {
           col.id === startColumnId ? { ...col, taskIds: newTaskIds } : col
         )
       );
-      // Actualiza el orden de las tareas en la misma columna en la base de datos
       updateTaskOrder(startColumnId, newTaskIds);
       return;
     }
@@ -212,7 +205,6 @@ useEffect(() => {
         return col;
       })
     );
-    // Actualiza el orden de las tareas entre columnas en la base de datos
     updateTaskOrder(startColumnId, startTaskIds);
     updateTaskOrder(finishColumnId, finishTaskIds);
   };
@@ -222,22 +214,20 @@ useEffect(() => {
     setTrashModalItem(true)
 
     if(trashModalItem === true){
-      const updatedToDoItemList = Object.fromEntries(
-        Object.entries(toDoList.toDoItemList)
-            .filter((key) => key !== item.id)
-    );
+      const updatedToDoItemList = allTasks.filter(taskId => taskId !== item.id)
+      const updatedColumns = [ ...columns ]
 
-    const updatedColumns = { ...toDoList.columns };
-    for (const columnId in updatedColumns) {
-        updatedColumns[columnId].taskIds = updatedColumns[columnId].taskIds.filter(taskId => taskId !== item.id);
-    }
+      for (const columnId in updatedColumns) {
+          updatedColumns[columnId].taskIds = updatedColumns[columnId].taskIds.filter(taskId => taskId !== item.id)
+          updateColumn(updatedColumns[columnId].id, updatedColumns);
+      }
 
-    setToDoList({
-        ...toDoList,
-        toDoItemList: updatedToDoItemList,
-        columns: updatedColumns
-    });
-    setTrashModalItem(false)
+      setAllTasks(updatedToDoItemList)
+      setColumns(updatedColumns)
+
+      setTrashModalItem(false)
+
+      deleteTask(item.id)
     }
 }
 
@@ -245,7 +235,7 @@ useEffect(() => {
     
     function getHighestColumnId() {
       let highestId = 0;
-      for (const columnId of toDoList.columnOrder) {
+      for (const columnId of orderColumns) {
         const id = columnId.slice(-1);
         if (id > highestId) {
           highestId = Number(id)
@@ -261,72 +251,39 @@ useEffect(() => {
       taskIds: []
     };
 
-    const updatedColumns = {
-      ...toDoList.columns,
-      [newColumnId]: newColumn
-    };
+    const updatedColumnOrder = [...orderColumns, newColumnId];
 
-    const updatedColumnOrder = [...toDoList.columnOrder, newColumnId];
+    addNewColumn(newColumn)
 
-    setToDoList({
-      ...toDoList,
-      columns: updatedColumns,
-      columnOrder: updatedColumnOrder
-    });
+    updateColumnOrder(updatedColumnOrder)
   };
 
 
   function deleteColumn(column) {
-    setActiveColumn(column)
-    setTrashModalColumn(true)
+    setActiveColumn(column);
+    
+     if (trashModalColumn === true) {
+      const updatedToDoItemList = [ ...allTasks ];
+      column.taskIds.forEach(taskId => {
+        delete updatedToDoItemList.find(task => task === taskId)
+        deleteTask(taskId)
+      });
 
-    if(trashModalColumn === true){
-      
-    const deletedColumn = toDoList.columns[column.id];
+      const updatedColumnOrder = orderColumns.filter(colId => colId !== column.id)
 
-    const updatedToDoItemList = { ...toDoList.toDoItemList };
-    deletedColumn.taskIds.forEach((taskId) => {
-      delete updatedToDoItemList[taskId];
-    });
+      updateColumnOrder(updatedColumnOrder)
+      setOrderColumns(updatedColumnOrder)
 
-    const updatedColumnOrder = toDoList.columnOrder.filter(
-      (columnId) => columnId !== column.id
-    );
-  
-    const { [column.id]: deleted, ...updatedColumns } = toDoList.columns;
-  
-    setToDoList({
-      ...toDoList,
-      toDoItemList: updatedToDoItemList,
-      columns: updatedColumns,
-      columnOrder: updatedColumnOrder,
-    });
-    setTrashModalColumn(false)
+      const newColumns = columns.filter(col => col.id !== column.id)
+      setColumns(newColumns)
+      eraseColumn(column.id)
+
+      setTrashModalColumn(false)
+    }
+    else {
+      setTrashModalColumn(true);
+    }
   }
-}
-
-/*
-return (
-  <>
-  {orderColumns.map((item) => {
-    return(
-      <h1>{item}</h1>
-    )
-  })}
-  {columns.map((item) => {
-    return(
-      <h1>{item.title}</h1>
-    )
-  })}
-  {allTasks.map((item) => {
-    return(
-      <h1>{item.title}</h1>
-    )
-  })}
-
-  </>
-)
-*/
 
 return (
   <>

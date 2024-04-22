@@ -12,7 +12,7 @@
         "title": "To Do App",
         "description": "Front End CSS",
         "dueDate": "2024-04-18",
-        "status": "doDo"
+        "status": "toDo"
       },
       "task-2": {
         "id": "task-2",
