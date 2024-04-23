@@ -254,8 +254,13 @@ function App() {
     const updatedColumnOrder = [...orderColumns, newColumnId];
 
     addNewColumn(newColumn)
-
     updateColumnOrder(updatedColumnOrder)
+
+    const addedColumns = [...columns, newColumn]
+    setColumns(addedColumns)
+
+    const orderedColumns = [ ...orderColumns, newColumn.id]
+    setOrderColumns(orderedColumns)
   };
 
 
