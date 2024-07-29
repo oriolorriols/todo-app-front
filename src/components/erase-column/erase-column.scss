@@ -1,0 +1,56 @@
+@import '../../colors.scss';
+
+.modal-backdrop{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.637);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: -2;
+}
+
+.eraseboxColumn .modal-body{
+    background-color: $listColor;
+    color: $font-color;
+    border-radius: 10px;
+    box-shadow: 8px 10px 20px 0px rgba(0, 0, 0, 0.377);
+}
+
+.eraseboxColumn div.text-center button:nth-child(1){
+    background-color: rgb(207, 70, 70);
+    color: white;
+}
+
+.eraseboxColumn div.text-center button:nth-child(1):hover{
+    background-color: rgba(207, 70, 70, 0.788);
+}
+
+.eraseboxColumn div.text-center button{
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.eraseboxColumn div.text-center button:nth-child(2){
+    background-color: rgb(189, 189, 189);
+}
+
+.eraseboxColumn div.text-center button:nth-child(2):hover{
+    background-color: rgb(150, 150, 150);
+}
+
+.eraseboxColumn .closeDiv{
+    position: relative;
+    top: -85px;
+    left: -24px;
+    background-color: #f1f1f1;
+    padding: 5px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.closeDiv:hover{
+    scale: 110%;
+}

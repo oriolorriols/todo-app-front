@@ -1,0 +1,97 @@
+@import '../../colors.scss';
+
+.addtask{
+    background-color: $itemColor;
+    color: $font-color;
+    border-radius: 10px;
+}
+
+.addtask input[type="text"], .addtask input[type="date"], .addtask textarea{
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    overflow-wrap: break-word;
+    padding: 5px;
+    background-color: rgb(236, 236, 236);
+}
+
+.addtask input:first-child{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.addtaskbutton:hover{
+    background-color: $itemColor;
+    border-radius: 10px;
+}
+
+
+.list h3{
+    font-size: 25px;
+    font-weight: 500;
+    color: $font-color;
+}
+
+.list{
+    background-color: $listColor;
+    border-radius: 10px;
+    box-shadow: #00000029 14px 15px 12px 0px;
+}
+
+.list:hover .icons{
+    display: flex;
+}
+
+.list .icons{
+    display: none;
+}
+
+.checked{
+    background-color: $completedItemColor;
+    color: #4e4e4e;
+    opacity: 0.7;
+}
+
+.inputTitle{
+    padding: 5px;
+    font-size: 25px;
+    font-weight: 500;
+    max-width: 16.5rem;
+}
+
+
+// radial input 
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: #4e4e4e;
+    width: 18px;
+    height: 18px;
+    border: 2px solid;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+  
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+  
+  input[type="radio"]::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+  }
+  
+  input[type="radio"]:checked::before {
+    transform: scale(0.5);
+    background: url(../../assets/completed.svg);
+    background-repeat: no-repeat;
+    background-position:center center;
+  }
+  

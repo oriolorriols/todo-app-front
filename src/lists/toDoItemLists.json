@@ -1,0 +1,69 @@
+{
+  "toDoItemList":  {
+      "task-0": {
+        "id": "task-0",
+        "title": "To Do App",
+        "description": "Backend needs some work...",
+        "dueDate": "2024-04-18",
+        "status": "toDo" 
+      },
+      "task-1": {
+        "id": "task-1",
+        "title": "To Do App",
+        "description": "Front End CSS",
+        "dueDate": "2024-04-18",
+        "status": "toDo"
+      },
+      "task-2": {
+        "id": "task-2",
+        "title": "Finish Homework",
+        "description": "Math assignment, English essay...",
+        "dueDate": "2024-04-30",
+        "status": "toDo"
+      },
+      "task-3": {
+        "id": "task-3",
+        "title": "Call Mom",
+        "description": "Check in, chat about weekend plans...",
+        "dueDate": "2024-04-20",
+        "status": "toDo"
+      },
+      "task-4": {
+        "id": "task-4",
+        "title": "Water",
+        "description": "",
+        "dueDate": "2024-04-23",
+        "status": "toDo"
+      }
+    },
+"columns": { 
+      "column-1": {
+        "id": "column-1",
+        "title": "FSD Master 24",
+        "taskIds": [
+          "task-0",
+          "task-1"
+          ]
+      },
+      "column-2": {
+        "id": "column-2",
+        "title": "Works",
+        "taskIds": [
+          "task-2",
+          "task-3"
+        ]
+      },
+      "column-3": {
+        "id": "column-3",
+        "title": "Shopping List",
+        "taskIds": ["task-4"]
+      }
+    
+  },
+
+  "columnOrder": [
+    "column-1",
+    "column-2",
+    "column-3"
+  ]
+}

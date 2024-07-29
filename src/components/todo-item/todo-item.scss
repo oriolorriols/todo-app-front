@@ -1,0 +1,46 @@
+@import '../../colors.scss';
+
+.toDoItem{
+    background-color: $itemColor;
+    color: $font-color;
+    border-radius: 10px;
+}
+
+.toDoItem h2{ 
+    font-size: 20px;
+    font-weight: 700;
+    overflow-wrap: break-word;
+}
+
+.toDoItem p{
+    font-weight: 300;
+    overflow-wrap: break-word;
+}
+
+.toDoItem input[type="text"], .toDoItem input[type="date"], .toDoItem textarea{
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    overflow-wrap: break-word;
+    padding: 5px;
+    background-color: rgb(236, 236, 236);
+}
+
+.toDoItem input:first-child{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.toDoItem:hover, .toDoItem:active{
+    outline-style: solid;
+    outline-color: $outlineColor;
+}
+
+.toDoItem .itemfunctions{
+    opacity: 0;
+}
+
+.toDoItem:hover .itemfunctions{
+    opacity: 1;
+}
