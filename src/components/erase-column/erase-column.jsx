@@ -15,7 +15,7 @@ function EraseColumn({activeColumn, changeModalStatus, deleteColumn}) {
                 </div>
             </div>
             <div className="closeDiv" onClick={(e) => changeModalStatus(false, "column")}>
-                <img src="/src/assets/close.svg" alt="" width="28px" height="28px"/>
+                <img src="close.svg" alt="" width="28px" height="28px"/>
             </div>
         </div>
         </>

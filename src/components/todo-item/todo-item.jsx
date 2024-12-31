@@ -42,7 +42,7 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
 
           <div className="flex justify-end mt-5 mb-1 mr-2">
               <div onClick={() => handleEditClick(item)} className="flex cursor-pointer">
-                <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
+                <img className="mr-2" src="save.svg" alt="" width="18px" />
                 <button>Save</button>
               </div>
              
@@ -60,16 +60,16 @@ function ToDoItem({ item, setToDone, letsCheck, canEdit, handleEditClick, handle
           <div className="flex justify-between mt-6">
             <div className="itemfunctions">
               <button onClick={() => handleEditClick(item)}>
-                <img src="/src/assets/edit.svg" width="18px" alt="" />
+                <img src="edit.svg" width="18px" alt="" />
               </button>
               <button onClick={() => eraseItem(item)} className="ml-2">
-                <img src="/src/assets/delete.svg" width="18px" alt="" />
+                <img src="delete.svg" width="18px" alt="" />
               </button>
             </div>
         
             <div className="flex">
               <p className="mr-2">{item.dueDate}</p>
-              <img src="/src/assets/watch.svg" width="15px" alt="" />
+              <img src="watch.svg" width="15px" alt="" />
             </div>
           </div>
         </>

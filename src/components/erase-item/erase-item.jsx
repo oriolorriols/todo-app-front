@@ -11,7 +11,7 @@ function EraseItem({item, changeModalStatus, eraseItem}) {
                 <button onClick={(e) => changeModalStatus(false, "item")} className="mr-7">Cancel</button>
             </div>
             <div className="closeDiv" onClick={(e) => changeModalStatus(false, "item")}>
-                <img src="/src/assets/close.svg" alt="" width="28px" height="28px"/>
+                <img src="close.svg" alt="" width="28px" height="28px"/>
             </div>
         </div>
         </>
