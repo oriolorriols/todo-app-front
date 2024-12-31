@@ -342,7 +342,7 @@ return (
           <div className="list addlist w-96 mt-5 mr-4 px-4 py-5">
             <div onClick={addColumn} className="addtaskbutton flex cursor-pointer p-2"> 
                <div className="flex">
-                 <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
+                 <img className="mr-2" src="add.svg" alt="" width="15px" />
                  <button>Add list</button>
                </div>
              </div>

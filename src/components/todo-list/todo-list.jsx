@@ -91,15 +91,15 @@ function ToDoLists(
              <>
                <h3>{column.title}</h3>
                <div className="icons flex">
-                 <img onClick={handleColumnTitle} src="/src/assets/edit.svg" width="18px" alt="" className="cursor-pointer"/>
-                 <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="/src/assets/delete.svg" width="18px" alt="" />
+                 <img onClick={handleColumnTitle} src="edit.svg" width="18px" alt="" className="cursor-pointer"/>
+                 <img onClick={() => deleteColumn(column)} className="cursor-pointer ml-2" src="delete.svg" width="18px" alt="" />
                </div>
              </>
            ) : ( 
              <>
                <input className="inputTitle" type="text" onChange={ (e) => handleEditInputChange(e, column, 'column-title')} value={column.title}/>
                <div className="flex cursor-pointer" onClick={handleColumnTitle}>
-                <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
+                <img className="mr-2" src="save.svg" alt="" width="18px" />
                 <button>Save</button>
                </div>
                
@@ -137,7 +137,7 @@ function ToDoLists(
            {!addTask ? (
              <div className="addtaskbutton flex cursor-pointer p-2" onClick={setTask}> 
                <div className="flex">
-                 <img className="mr-2" src="/src/assets/add.svg" alt="" width="15px" />
+                 <img className="mr-2" src="add.svg" alt="" width="15px" />
                  <button>Add task</button>
                </div>
              </div>
@@ -162,7 +162,7 @@ function ToDoLists(
                <div className="flex justify-between mt-5 mb-1 mx-2"> 
                  <button onClick={cancelAddToDo}>Cancel</button>
                    <div onClick={handleAddToDo} className=" flex cursor-pointer">
-                     <img className="mr-2" src="/src/assets/save.svg" alt="" width="18px" />
+                     <img className="mr-2" src="save.svg" alt="" width="18px" />
                      <button type="submit">Save</button>
                    </div>
                </div>
