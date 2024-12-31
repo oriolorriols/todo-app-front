@@ -1,3 +1,5 @@
+nvm use 21.6.2
+
 # Aplicación TO-DO (Frontend / UI)
 
 ## Descripción
