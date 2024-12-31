@@ -1,5 +1,4 @@
-
-const baseUrl = "http://localhost:3000"
+const baseUrl = import.meta.env.VITE_BACKEND;
 
 export const getTasks = () => {
     return fetch(`${baseUrl}/tasks`).then(res => res.json())
