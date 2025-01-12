@@ -1,5 +1,8 @@
 # Aplicación TO-DO (Frontend / UI)
 
+Live server:
+https://todoapp-oriolorriols.netlify.app/
+
 ## Descripción
 
 El objetivo de este ejercicio es desarrollar una aplicación de gestión de tareas utilizando React junto con Vite como base para la configuración del proyecto. La aplicación permitirá a los usuarios crear, visualizar, editar y eliminar tareas de una lista. Cada tarea constará de un título, descripción, fecha de vencimiento y un estado.
